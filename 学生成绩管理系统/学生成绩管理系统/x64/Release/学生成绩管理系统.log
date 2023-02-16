@@ -1,0 +1,2 @@
+﻿  test.cpp
+E:\cpp代码\cpp\学生成绩管理系统\学生成绩管理系统\test.cpp(203,10): fatal  error C1083: 无法打开包括文件: “mysql.h”: No such file or directory
