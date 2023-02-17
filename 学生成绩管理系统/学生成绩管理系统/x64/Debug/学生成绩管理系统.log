@@ -1,4 +1,4 @@
-﻿  test.cpp
-E:\cpp代码\cpp\学生成绩管理系统\学生成绩管理系统\test.cpp(220,12): warning C4101: “row”: 未引用的局部变量
-E:\cpp代码\cpp\学生成绩管理系统\学生成绩管理系统\test.cpp(219,13): warning C4101: “res”: 未引用的局部变量
+﻿  t.cpp
+E:\cpp代码\cpp\学生成绩管理系统\学生成绩管理系统\t.cpp(42,12): warning C4267: “参数”: 从“size_t”转换到“unsigned long”，可能丢失数据
+E:\cpp代码\cpp\学生成绩管理系统\学生成绩管理系统\t.cpp(51,45): warning C4267: “=”: 从“size_t”转换到“unsigned long”，可能丢失数据
   学生成绩管理系统.vcxproj -> E:\cpp代码\cpp\学生成绩管理系统\x64\Debug\学生成绩管理系统.exe
