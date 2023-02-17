@@ -18,11 +18,8 @@
     <ClCompile Include="test.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="mysql.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="t.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="Mysql.h">
+      <Filter>头文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

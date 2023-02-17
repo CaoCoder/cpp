@@ -1,38 +1,157 @@
 //#pragma once//防止头文件被包含
+//
 //#include <iostream>
 //using namespace std;
 //
 //#include <WinSock.h>
 //#include <mysql.h>
+///*向数据库中写入文件*/
+//int WriteMysql()
+//{
+//    MYSQL* conn;
+//    MYSQL_STMT* stmt;
+//    const char* query;
+//    const char* filename = "data.txt";
+//    FILE* fp;
+//    char name[20];
+//    int id, clas, math, english, physics;
+//    // 打开文件
+//    fp = fopen(filename, "r");
+//    if (fp == NULL) {
+//        printf("Error opening file!\n");
+//        return -1;
+//    }
+//    // 连接数据库
+//    conn = mysql_init(NULL);
+//    if (conn == NULL) {
+//        printf("Error connecting to database!\n");
+//        return -1;
+//    }
+//    if (mysql_real_connect(conn, "localhost", "root", "yigebeiju123", "cc", 3306, NULL, 0) == NULL)
+//    {
+//        printf("Error connecting to database!\n");
+//        return -1;
+//    }
+//    else
+//    {
+//        printf("链接成功\n");
+//    }
 //
+//    // 先清空数据库
+//    query = "DELETE FROM student";
+//    mysql_query(conn, query);
+//    // 读取文件中的数据
+//    while (fscanf(fp, "%s%d%d%d%d%d",
+//        name, &id, &clas, &math, &english, &physics) != EOF)
+//    {
+//        // 构造插入语句
+//        query = "INSERT INTO student (name, id, clas, math, english, physics) VALUES (?,?, ?, ?, ?,?)";
+//        // 准备插入语句
+//        stmt = mysql_stmt_init(conn);
+//        if (mysql_stmt_prepare(stmt, query, strlen(query)) != 0) {
+//            printf("Error preparing statement!\n");
+//            return -1;
+//        }
+//        // 执行插入语句
+//        MYSQL_BIND bind[6];
+//        memset(bind, 0, sizeof(bind));
+//        bind[0].buffer_type = MYSQL_TYPE_STRING;
+//        bind[0].buffer = (char*)name;
+//        bind[0].buffer_length = strlen(name);
 //
-////链接数据库代码
-////void test()
-////{
-////    printf("test\n");
-////
-////
-////    //初始化数据库
-////    mysql_init(&m);
-////
-////    //设置编码方式
-////    mysql_options(&m, MYSQL_SET_CHARSET_NAME, "gbk");
-////
-////    //连接数据库
-////    if (mysql_real_connect(&m, "localhost", "root", "yigebeiju123", "cc", 3306, NULL, 0))
-////    {                           //主机       用户名   密码      数据库名  端口
-////        printf("数据库连接成功\n");
-////    }
-////    else {
-////        printf("数据库连接失败:%s \n", mysql_error(&m));
-////        //输出错误信息
-////    }
-////}
+//        bind[1].buffer_type = MYSQL_TYPE_LONG;
+//        bind[1].buffer = &id;
+//        bind[2].buffer_type = MYSQL_TYPE_LONG;
+//        bind[2].buffer = &clas;
+//        bind[3].buffer_type = MYSQL_TYPE_LONG;
+//        bind[3].buffer = &math;
+//        bind[4].buffer_type = MYSQL_TYPE_LONG;
+//        bind[4].buffer = &english;
+//        bind[5].buffer_type = MYSQL_TYPE_LONG;
+//        bind[5].buffer = &physics;
+//
+//        mysql_stmt_bind_param(stmt, bind);
+//        mysql_stmt_execute(stmt);
+//    }
+//    // 关闭文件
+//    fclose(fp);
+//    // 关闭数据库连接
+//    mysql_close(conn);
+//
+//}
+///*从数据库中读取文件*/
+//int ReadMysql()
+//{
+//    MYSQL* conn;
+//    MYSQL_STMT* stmt;
+//    const char* query;
+//    const char* filename = "data.txt";
+//    FILE* fp;
+//    char name[20];
+//    int id, clas, math, english, physics;
+//    // 打开文件
+//    fp = fopen(filename, "w");
+//    if (fp == NULL) {
+//        printf("Error opening file!\n");
+//        return -1;
+//    }
+//    // 连接数据库
+//    conn = mysql_init(NULL);
+//    if (conn == NULL) {
+//        printf("Error connecting to database!\n");
+//        return -1;
+//    }
+//    if (mysql_real_connect(conn, "localhost", "root", "yigebeiju123", "cc", 3306, NULL, 0) == NULL)
+//    {
+//        printf("Error connecting to database!\n");
+//        return -1;
+//    }
+//    else
+//    {
+//        printf("链接成功\n");
+//    }
+//    // 构造查询语句
+//    query = "SELECT name, id, clas, math, english, physics FROM student";
+//    // 准备查询语句
+//    stmt = mysql_stmt_init(conn);
+//    if (mysql_stmt_prepare(stmt, query, strlen(query)) != 0) {
+//        printf("Error preparing statement!\n");
+//        return -1;
+//    }
+//    // 执行查询语句
+//    MYSQL_BIND bind[6];
+//    memset(bind, 0, sizeof(bind));
+//    bind[0].buffer_type = MYSQL_TYPE_STRING;
+//    bind[0].buffer = (char*)name;
+//    bind[0].buffer_length = strlen(name);
+//    bind[1].buffer_type = MYSQL_TYPE_LONG;
+//    bind[1].buffer = &id;
+//    bind[2].buffer_type = MYSQL_TYPE_LONG;
+//    bind[2].buffer = &clas;
+//    bind[3].buffer_type = MYSQL_TYPE_LONG;
+//    bind[3].buffer = &math;
+//    bind[4].buffer_type = MYSQL_TYPE_LONG;
+//    bind[4].buffer = &english;
+//    bind[5].buffer_type = MYSQL_TYPE_LONG;
+//    bind[5].buffer = &physics;
+//    mysql_stmt_bind_result(stmt, bind);
+//    mysql_stmt_execute(stmt);
+//    // 读取查询结果
+//    while (mysql_stmt_fetch(stmt) == 0) {
+//        fprintf(fp, "%s %d %d %d %d %d\n",
+//            name, id, clas, math, english, physics);
+//    }
+//    // 关闭文件
+//    fclose(fp);
+//    // 关闭数据库连接
+//    mysql_close(conn);
+//}
 //
 //#include <stdio.h>
 //#include <malloc.h>
 //#include <assert.h>
 //#include <stdlib.h>
+//#include <string.h>
 ////各科成绩
 //typedef struct Score
 //{
@@ -60,6 +179,91 @@
 //    struct ListNode* next;
 //    ListDataType val;
 //}Node;
+//
+////将学生信息等数据写入到文件data.txt中
+//void WriteData(Node* phead)
+//{
+//    //打开文件
+//    FILE* pf = fopen("data.txt", "w");
+//    if (pf == NULL)
+//    {
+//        printf("保存失败\n");
+//        return;
+//    }
+//    //向文件传输数据
+//    Node* cur = phead->next;
+//    printf("%-9s\t%-9s\t%-9s\t%-9s\t%-9s\t%-9s\n", "姓名", "学号", "班级", "数学", "英语", "物理");
+//    while (cur != phead)
+//    {
+//        fprintf(pf, "%s %d %d %d %d %d\n", cur->val.name, cur->val.id, cur->val.clas,
+//           cur->val.s.math, cur->val.s.english, cur->val.s.physics);
+//
+//        cur = cur->next;
+//    }
+//
+//    //关闭文件
+//    fclose(pf);
+//    pf = NULL;
+//    //printf("写入文件成功\n");
+//}
+//
+//Node* BuyNode(ListDataType x)
+//{
+//    Node* newNode = (Node*)malloc(sizeof(Node));
+//    if (newNode == NULL)
+//    {
+//        printf("开辟失败");
+//        exit(-1);
+//    }
+//
+//    //初始化节点数据
+//    newNode->next = NULL;
+//    newNode->prev = NULL;
+//    return newNode;//返回节点
+//}
+////从文件中读出数据到程序中
+//void ReadData(Node* phead)
+//{
+//    ReadMysql();
+//    stu st = { "张三",1,1,1,1,1 };
+//    //打开文件
+//    FILE* pf = fopen("data.txt", "r");
+//    if (pf == NULL)
+//    {
+//        printf("%s\n", strerror(errno));
+//        return;//文件打开失败，失败返回
+//    }
+//
+//    Node* newNode = BuyNode(st);
+//       
+//   //对文件进行格式化读取
+//    Node* tail = phead->prev;
+//    printf("%-9s\t%-9s\t%-9s\t%-9s\t%-9s\t%-9s\n", "姓名", "学号", "班级", "数学", "英语", "物理");
+//        while (fscanf(pf, "%s %d %d %d %d %d\n", newNode->val.name, &newNode->val.id, &newNode->val.clas,
+//            &newNode->val.s.math, &newNode->val.s.english, &newNode->val.s.physics) != EOF)
+//        {
+//            printf("%-9s\t%-9d\t%-9d\t%-9d\t%-9d\t%-9d\n", newNode->val.name, newNode->val.id, newNode->val.clas,
+//                newNode->val.s.math, newNode->val.s.english, newNode->val.s.physics);
+//          
+//            //phead==tail ->newNode 
+//
+//
+//            tail->next = newNode;
+//            newNode->prev = tail;
+//            newNode->next = phead;
+//            phead->prev = newNode;
+//
+//            tail = phead->prev;
+//
+//            newNode = BuyNode(st);
+//        }
+//       
+//    
+//    //关闭文件
+//    fclose(pf);
+//    pf = NULL;
+//    printf("读取数据完成\n");
+//}
 ////初始化信息
 //void InitStu(Node** x)
 //{
@@ -82,69 +286,7 @@
 //    printf("请输入物理成绩：");
 //
 //    scanf("%d", &(*x)->val.s.physics);
-//    //printf("输入成功\n");
-//    //向数据库插入数据
-//    MYSQL* conn;
-//    MYSQL_STMT* stmt;
-//    MYSQL_BIND bind[6];
-// 
-//    conn = mysql_init(NULL);
 //
-//    if (mysql_real_connect(conn, "localhost", "root", "yigebeiju123", "cc", 3306, NULL, 0) == NULL)
-//    {
-//        printf("Error: %!s(MISSING)\n", mysql_error(conn));
-//   
-//    }
-//    else
-//    {
-//        printf("数据库链接成功\n");
-//    }
-//
-//    stmt = mysql_stmt_init(conn);
-//
-//    if (mysql_stmt_prepare(stmt, "INSERT INTO student (name, id, clas, math, english, physics) VALUES (3, 3, 3, 3, 3, 3)", -1) != 0)
-//    {
-//        printf("Error: %!s(MISSING)\n", mysql_stmt_error(stmt));
-//    }
-//
-//    const char* sql = "insert into student values(4,4,4,4,4,4)";
-//
-//    memset(bind, 0, sizeof(bind));
-//    bind[0].buffer_type = MYSQL_TYPE_STRING;
-//    bind[0].buffer = (char*)(*x)->val.name;
-//    bind[0].buffer_length = sizeof((*x)->val.name);
-//    bind[0].is_null = 0;
-//    bind[1].buffer_type = MYSQL_TYPE_LONG;
-//    bind[1].buffer = (char*)&(*x)->val.id;
-//    bind[1].is_null = 0;
-//
-//    bind[2].buffer_type = MYSQL_TYPE_LONG;
-//    bind[2].buffer = (char*)&(*x)->val.clas;
-//    bind[2].is_null = 0;
-//
-//    bind[3].buffer_type = MYSQL_TYPE_LONG;
-//    bind[3].buffer = (char*)&(*x)->val.s.math;
-//    bind[3].is_null = 0;
-//
-//    bind[4].buffer_type = MYSQL_TYPE_LONG;
-//    bind[4].buffer = (char*)&(*x)->val.s.english;
-//    bind[4].is_null = 0;
-//
-//    bind[5].buffer_type = MYSQL_TYPE_LONG;
-//    bind[5].buffer = (char*)&(*x)->val.s.physics;
-//    bind[5].is_null = 0;
-//
-//    if (mysql_stmt_bind_param(stmt, bind) != 0)
-//    {
-//        printf("Error: %!s(MISSING)\n", mysql_stmt_error(stmt));
-//    }
-//
-//    if (mysql_stmt_execute(stmt) != 0)
-//    {
-//        printf("Error: %!s(MISSING)\n", mysql_stmt_error(stmt));
-//    }
-//    mysql_stmt_close(stmt);
-//    mysql_close(conn);
 //}
 ////申请节点空间
 //Node* BuynewNode(ListDataType x)
@@ -201,6 +343,10 @@
 //    newNode->prev = tail;
 //    newNode->next = phead;
 //    phead->prev = newNode;
+//
+//    WriteData(phead);
+//
+//    WriteMysql();
 //    printf("增加信息成功\n");
 //
 //}
@@ -233,7 +379,8 @@
 //    {
 //        if (cur->val.id == x)
 //        {
-//            printf("找到了\n");
+//            printf("结果如下\n");
+//            printf("%-9s\t%-9s\t%-9s\t%-9s\t%-9s\t%-9s\n", "姓名", "学号", "班级", "数学", "英语", "物理");
 //            printf("%-9s\t%-9d\t%-9d\t%-9d\t%-9d\t%-9d\n", cur->val.name, cur->val.id, cur->val.clas,
 //                cur->val.s.math, cur->val.s.english, cur->val.s.physics);
 //
@@ -263,6 +410,11 @@
 //
 //    free(pos);
 //    pos = NULL;
+//
+//    WriteData(phead);
+//
+//    WriteMysql();
+//
 //    printf("删除成功\n");
 //}
 ////修改指定位置的节点的学生成绩
@@ -284,7 +436,9 @@
 //    scanf("%d", &pos->val.s.physics);
 //
 //
+//    WriteData(phead);
 //
+//    WriteMysql();
 //    printf("修改成功\n");
 //}
 //
