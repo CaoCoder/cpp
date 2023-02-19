@@ -1,0 +1,18 @@
+﻿test.obj : error LNK2019: 无法解析的外部符号 "public: __cdecl Component::Component(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (??0Component@@QEAA@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@00@Z)，函数 main 中引用了该符号
+test.obj : error LNK2019: 无法解析的外部符号 "public: int __cdecl Batch::getQuantity(class Component)const " (?getQuantity@Batch@@QEBAHVComponent@@@Z)，函数 main 中引用了该符号
+test.obj : error LNK2019: 无法解析的外部符号 "public: __cdecl Batch::Batch(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (??0Batch@@QEAA@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)，函数 main 中引用了该符号
+test.obj : error LNK2019: 无法解析的外部符号 "public: void __cdecl Batch::addComponent(class Component,int)" (?addComponent@Batch@@QEAAXVComponent@@H@Z)，函数 main 中引用了该符号
+test.obj : error LNK2019: 无法解析的外部符号 "public: void __cdecl Batch::removeComponent(class Component,int)" (?removeComponent@Batch@@QEAAXVComponent@@H@Z)，函数 main 中引用了该符号
+test.obj : error LNK2019: 无法解析的外部符号 "public: __cdecl Storage::Storage(void)" (??0Storage@@QEAA@XZ)，函数 main 中引用了该符号
+test.obj : error LNK2019: 无法解析的外部符号 "public: __cdecl Storage::Storage(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,int)" (??0Storage@@QEAA@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@H@Z)，函数 main 中引用了该符号
+test.obj : error LNK2019: 无法解析的外部符号 "public: int __cdecl Storage::getQuantity(class Component)const " (?getQuantity@Storage@@QEBAHVComponent@@@Z)，函数 main 中引用了该符号
+test.obj : error LNK2019: 无法解析的外部符号 "public: __cdecl ComponentWarehouse::ComponentWarehouse(void)" (??0ComponentWarehouse@@QEAA@XZ)，函数 main 中引用了该符号
+test.obj : error LNK2019: 无法解析的外部符号 "public: void __cdecl ComponentWarehouse::addComponent(class Component)" (?addComponent@ComponentWarehouse@@QEAAXVComponent@@@Z)，函数 main 中引用了该符号
+test.obj : error LNK2019: 无法解析的外部符号 "public: void __cdecl ComponentWarehouse::removeComponent(class Component)" (?removeComponent@ComponentWarehouse@@QEAAXVComponent@@@Z)，函数 main 中引用了该符号
+test.obj : error LNK2019: 无法解析的外部符号 "public: void __cdecl ComponentWarehouse::addStorage(class Storage)" (?addStorage@ComponentWarehouse@@QEAAXVStorage@@@Z)，函数 main 中引用了该符号
+test.obj : error LNK2019: 无法解析的外部符号 "public: void __cdecl ComponentWarehouse::removeStorage(class Storage)" (?removeStorage@ComponentWarehouse@@QEAAXVStorage@@@Z)，函数 main 中引用了该符号
+test.obj : error LNK2019: 无法解析的外部符号 "public: void __cdecl ComponentWarehouse::addBatch(class Batch)" (?addBatch@ComponentWarehouse@@QEAAXVBatch@@@Z)，函数 main 中引用了该符号
+test.obj : error LNK2019: 无法解析的外部符号 "public: void __cdecl ComponentWarehouse::removeBatch(class Batch)" (?removeBatch@ComponentWarehouse@@QEAAXVBatch@@@Z)，函数 main 中引用了该符号
+test.obj : error LNK2019: 无法解析的外部符号 "public: void __cdecl ComponentWarehouse::addRecord(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,class Component,int,class Batch,class Storage)" (?addRecord@ComponentWarehouse@@QEAAXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VComponent@@HVBatch@@VStorage@@@Z)，函数 main 中引用了该符号
+test.obj : error LNK2019: 无法解析的外部符号 "public: __cdecl FileOperator::FileOperator(void)" (??0FileOperator@@QEAA@XZ)，函数 main 中引用了该符号
+E:\cpp代码\cpp\zuo_ti\x64\Debug\简单做题的代码.exe : fatal error LNK1120: 17 个无法解析的外部命令
