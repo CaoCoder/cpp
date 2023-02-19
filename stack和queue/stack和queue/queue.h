@@ -93,7 +93,6 @@ namespace cao
 		
 	public:
 		//¥Û∂—”√ <
-
 		Compare comFunc;
 		void AdjustUp(int child)
 		{
