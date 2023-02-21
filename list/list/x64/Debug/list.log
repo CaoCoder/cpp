@@ -1,0 +1,3 @@
+﻿  test.cpp
+E:\cpp代码\cpp\list\list\list.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  list.vcxproj -> E:\cpp代码\cpp\list\x64\Debug\list.exe

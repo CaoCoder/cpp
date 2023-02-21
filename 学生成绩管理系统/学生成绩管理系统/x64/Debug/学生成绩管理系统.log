@@ -1,8 +1,12 @@
 ﻿  test.cpp
-E:\cpp代码\cpp\学生成绩管理系统\学生成绩管理系统\test.cpp(51,12): warning C4267: “参数”: 从“size_t”转换到“unsigned long”，可能丢失数据
-E:\cpp代码\cpp\学生成绩管理系统\学生成绩管理系统\test.cpp(60,45): warning C4267: “=”: 从“size_t”转换到“unsigned long”，可能丢失数据
-E:\cpp代码\cpp\学生成绩管理系统\学生成绩管理系统\test.cpp(117,8): warning C4267: “参数”: 从“size_t”转换到“unsigned long”，可能丢失数据
-E:\cpp代码\cpp\学生成绩管理系统\学生成绩管理系统\test.cpp(126,41): warning C4267: “=”: 从“size_t”转换到“unsigned long”，可能丢失数据
-E:\cpp代码\cpp\学生成绩管理系统\学生成绩管理系统\test.cpp(148): warning C4715: “ReadMysql”: 不是所有的控件路径都返回值
-E:\cpp代码\cpp\学生成绩管理系统\学生成绩管理系统\test.cpp(81): warning C4715: “WriteMysql”: 不是所有的控件路径都返回值
+E:\cpp代码\cpp\学生成绩管理系统\学生成绩管理系统\test.cpp(70,12): warning C4267: “参数”: 从“size_t”转换到“unsigned long”，可能丢失数据
+E:\cpp代码\cpp\学生成绩管理系统\学生成绩管理系统\test.cpp(139,12): warning C4267: “参数”: 从“size_t”转换到“unsigned long”，可能丢失数据
+E:\cpp代码\cpp\学生成绩管理系统\学生成绩管理系统\test.cpp(148,45): warning C4267: “=”: 从“size_t”转换到“unsigned long”，可能丢失数据
+E:\cpp代码\cpp\学生成绩管理系统\学生成绩管理系统\test.cpp(205,8): warning C4267: “参数”: 从“size_t”转换到“unsigned long”，可能丢失数据
+E:\cpp代码\cpp\学生成绩管理系统\学生成绩管理系统\test.cpp(214,41): warning C4267: “=”: 从“size_t”转换到“unsigned long”，可能丢失数据
+E:\cpp代码\cpp\学生成绩管理系统\学生成绩管理系统\test.cpp(799,7): warning C4101: “c”: 未引用的局部变量
+E:\cpp代码\cpp\学生成绩管理系统\学生成绩管理系统\test.cpp(236): warning C4715: “ReadMysql”: 不是所有的控件路径都返回值
+E:\cpp代码\cpp\学生成绩管理系统\学生成绩管理系统\test.cpp(94): warning C4715: “WriteCodeMysql”: 不是所有的控件路径都返回值
+E:\cpp代码\cpp\学生成绩管理系统\学生成绩管理系统\test.cpp(169): warning C4715: “WriteMysql”: 不是所有的控件路径都返回值
+E:\cpp代码\cpp\学生成绩管理系统\学生成绩管理系统\test.cpp(757): warning C4715: “Print”: 不是所有的控件路径都返回值
   学生成绩管理系统.vcxproj -> E:\cpp代码\cpp\学生成绩管理系统\x64\Debug\学生成绩管理系统.exe

@@ -1,6 +1,7 @@
-lisi 1 1 1 1 3
+lisi 1 1 1 5 8
 wangwu 1 1 2 1 1
 zhangsan 1 1 1 1 1
 lisi 1 1 1 1 3
 wangwu 1 1 2 1 1
 5 5 5 50 50 50
+2 2 2 2 2 2

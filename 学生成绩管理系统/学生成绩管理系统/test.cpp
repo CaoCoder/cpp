@@ -5,6 +5,93 @@ using namespace std;
 
 #include <WinSock.h>
 #include <mysql.h>
+//将注册的账号密码写入文件
+void WriteCode(int a,int b, int c)
+{
+    //打开文件
+    FILE* pf = fopen("code.txt", "w");
+    if (pf == NULL)
+    {
+        printf("保存失败\n");
+        return;
+    }
+    //向文件传输数据
+    int id = a, nummber =b , code = c;
+        fprintf(pf, "%d %d %d\n", id, nummber, code);
+    
+    //关闭文件
+    fclose(pf);
+    pf = NULL;
+    //printf("写入文件成功\n");
+}
+//将注册的账号密码写入数据库
+int WriteCodeMysql()
+{
+    MYSQL* conn;
+    MYSQL_STMT* stmt;
+    const char* query;
+    const char* filename = "code.txt";
+    FILE* fp;
+    int id,nummber,code;
+    // 打开文件
+    fp = fopen(filename, "r");
+    if (fp == NULL) {
+        printf("Error opening file!\n");
+        return -1;
+    }
+    // 连接数据库
+    conn = mysql_init(NULL);
+    if (conn == NULL) {
+        printf("Error connecting to database!\n");
+        return -1;
+    }
+    if (mysql_real_connect(conn, "localhost", "root", "721229", "test", 3306, NULL, 0) == NULL)
+    {
+        printf("Error connecting to database!\n");
+        return -1;
+    }
+    else
+    {
+
+        /*printf("链接成功\n")*/;
+    }
+
+    // 先清空数据库
+    query = "DELETE FROM Code";
+    mysql_query(conn, query);
+    // 读取文件中的数据
+    while (fscanf(fp, "%d%d%d",
+        &id,&nummber,&code) != EOF)
+    {
+        // 构造插入语句
+        query = "INSERT INTO Code (id, nummber, code) VALUES (?,?, ?)";
+        // 准备插入语句
+        stmt = mysql_stmt_init(conn);
+        if (mysql_stmt_prepare(stmt, query, strlen(query)) != 0) {
+            printf("Error preparing statement!\n");
+            return -1;
+        }
+        // 执行插入语句
+        MYSQL_BIND bind[3];
+        memset(bind, 0, sizeof(bind));
+        
+
+        bind[0].buffer_type = MYSQL_TYPE_LONG;
+        bind[0].buffer = &id;
+        bind[1].buffer_type = MYSQL_TYPE_LONG;
+        bind[1].buffer = &nummber;
+        bind[2].buffer_type = MYSQL_TYPE_LONG;
+        bind[2].buffer = &code;
+      
+        mysql_stmt_bind_param(stmt, bind);
+        mysql_stmt_execute(stmt);
+    }
+    // 关闭文件
+    fclose(fp);
+    // 关闭数据库连接
+    mysql_close(conn);
+
+}
 /*向数据库中写入文件*/
 int WriteMysql()
 {
@@ -27,14 +114,15 @@ int WriteMysql()
         printf("Error connecting to database!\n");
         return -1;
     }
-    if (mysql_real_connect(conn, "localhost", "root", "yigebeiju123", "cc", 3306, NULL, 0) == NULL)
+    if (mysql_real_connect(conn, "localhost", "root", "721229", "test", 3306, NULL, 0) == NULL)
     {
         printf("Error connecting to database!\n");
         return -1;
     }
     else
     {
-        printf("链接成功\n");
+
+        /*printf("链接成功\n")*/;
     }
 
     // 先清空数据库
@@ -101,14 +189,14 @@ int ReadMysql()
         printf("Error connecting to database!\n");
         return -1;
     }
-    if (mysql_real_connect(conn, "localhost", "root", "yigebeiju123", "cc", 3306, NULL, 0) == NULL)
+    if (mysql_real_connect(conn, "localhost", "root", "721229", "test", 3306, NULL, 0) == NULL)
     {
         printf("Error connecting to database!\n");
         return -1;
     }
     else
     {
-        printf("链接成功\n");
+        /*printf("链接成功\n")*/;
     }
     // 构造查询语句
     query = "SELECT name, id, clas, math, english, physics FROM student";
@@ -192,7 +280,7 @@ void WriteData(Node* phead)
     }
     //向文件传输数据
     Node* cur = phead->next;
-    printf("%-9s\t%-9s\t%-9s\t%-9s\t%-9s\t%-9s\n", "姓名", "学号", "班级", "数学", "英语", "物理");
+   
     while (cur != phead)
     {
         fprintf(pf, "%s %d %d %d %d %d\n", cur->val.name, cur->val.id, cur->val.clas,
@@ -238,12 +326,11 @@ void ReadData(Node* phead)
 
     //对文件进行格式化读取
     Node* tail = phead->prev;
-    printf("%-9s\t%-9s\t%-9s\t%-9s\t%-9s\t%-9s\n", "姓名", "学号", "班级", "数学", "英语", "物理");
+   
     while (fscanf(pf, "%s %d %d %d %d %d\n", newNode->val.name, &newNode->val.id, &newNode->val.clas,
         &newNode->val.s.math, &newNode->val.s.english, &newNode->val.s.physics) != EOF)
     {
-        printf("%-9s\t%-9d\t%-9d\t%-9d\t%-9d\t%-9d\n", newNode->val.name, newNode->val.id, newNode->val.clas,
-            newNode->val.s.math, newNode->val.s.english, newNode->val.s.physics);
+
 
         //phead==tail ->newNode 
 
@@ -438,6 +525,7 @@ void Modify(Node* phead, Node* pos)
 
     WriteData(phead);
 
+
     WriteMysql();
     printf("修改成功\n");
 }
@@ -468,9 +556,9 @@ void menu()
 {
 	printf("***************************\n");
 	printf("***************************\n");
-	printf("******1.管理员界面：123****\n");
-	printf("******2.老师界面： 1234****\n");
-	printf("******3.学生界面：12345****\n");
+	printf("******1.管理员界面：   ****\n");
+	printf("******2.老师界面：     ****\n");
+	printf("******3.学生界面：     ****\n");
 	printf("***************************\n");
 	printf("***************************\n");
 	printf("请选择(1-3):");
@@ -508,6 +596,21 @@ void Admin(Node* phead)
 			break;
 		case 2:
 			Modify(phead, Find(phead));
+            while (1)
+            {
+                char s[20] = {0};
+                printf("是否还要继续修改?请输入:(yes/no)\n");
+                scanf("%s", s);
+                if (strcmp(s, "yes") == 0)
+                {
+                    Modify(phead, Find(phead));
+                }
+                else
+                {
+
+                    break;
+                }
+            }
 			break;
 		case 3:
 			Erease(phead, Find(phead));
@@ -576,12 +679,81 @@ void StudentMenu()
 	printf("*****欢迎来到学生界面******\n");
 	printf("***************************\n");
 	printf("***************************\n");
-	printf("******1.查询成绩       ****\n");
-	printf("******2.返回主菜单     ****\n");
+	printf("******1.注册账号       ****\n");
+	printf("******2.查看自己成绩   ****\n");
+    printf("******3.返回主菜单     ****\n");
 	printf("***************************\n");
 	printf("***************************\n");
-	printf("请选择(1-2):");
+	printf("请选择(1-3):");
 
+}
+
+void Login(Node* phead)
+{
+
+    int id = 0;
+    int nummber = 0;
+    int code = 0;
+    printf("请输入学号：");
+    scanf("%d", &id);
+    printf("请输入账号：");
+    scanf("%d", &nummber);
+    printf("请输入密码：");
+    scanf("%d", &code);
+
+    WriteCode(id, nummber, code);
+    WriteCodeMysql();
+}
+int Print(Node* phead)
+{
+    assert(phead);
+    MYSQL* conn;
+    MYSQL_RES* res;
+    MYSQL_ROW row;
+
+    const char* server = "localhost";
+    const char* user = "root";
+   const char* password = "721229";
+   const char* database = "test";
+
+    conn = mysql_init(NULL);
+
+    if (!mysql_real_connect(conn, server, user, password, database, 3306, NULL, 0)) {
+        printf("Error: %s\n", mysql_error(conn));
+        return 1;
+    }
+
+    if (mysql_query(conn, "SELECT * FROM Code LIMIT 1")) {
+        printf("Error: %s\n", mysql_error(conn));
+        return 1;
+    }
+
+    res = mysql_use_result(conn);
+    row = mysql_fetch_row(res);
+
+    printf("First data in first row: %s\n", row[0]);
+
+  
+   
+    Node* cur = phead->next;
+    printf("%-9s\t%-9s\t%-9s\t%-9s\t%-9s\t%-9s\n", "姓名", "学号", "班级", "数学", "英语", "物理");
+    while (cur != phead)
+    {
+        char str[20];
+        _itoa(cur->val.id, str, 10);
+        if (strcmp(str, row[0])==0)
+        {
+            printf("%-9s\t%-9d\t%-9d\t%-9d\t%-9d\t%-9d\n", cur->val.name, cur->val.id, cur->val.clas,
+                cur->val.s.math, cur->val.s.english, cur->val.s.physics);
+            break;
+        }
+
+        cur = cur->next;
+    }
+
+    mysql_free_result(res);
+    mysql_close(conn);
+    printf("\n\n");
 }
 void Student(Node* phead)
 {
@@ -594,11 +766,15 @@ void Student(Node* phead)
 		switch (n)
 		{
 		case 1:
-			ListPrint(phead);
+            Login(phead);
+
 			break;
 		case 2:
-			return;
+            Print(phead);
 			break;
+        case 3:
+            return;
+            break;
 		default:
 			printf("输入格式错误请重新输入\n");
 			break;
@@ -617,7 +793,7 @@ int main()
 
 	const char* ma = "123";
 	const char* mb = "1234";
-	const char* mc = "12345";
+
 	char a[20];
 	char b[20];
 	char c[20];
@@ -653,7 +829,9 @@ int main()
 
 			break;
 		case 3:
-			printf("请输入密码：");
+            Student(phead);
+
+		/*	printf("请输入密码：");
 			scanf("%s", c);
 			if (strcmp(mc, c) == 0)
 			{
@@ -662,7 +840,7 @@ int main()
 			else
 			{
 				printf("密码输入错误请重新输入\n");
-			}
+			}*/
 
 			break;
 
