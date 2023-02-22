@@ -89,8 +89,10 @@ namespace cao
 
         typedef Reverse_iterator<const_iterator, const T&, const T*> const_reverse_iterator;
 
+        
         reverse_iterator rbegin()
         {
+            //用正向迭代器的end()迭代器构造反向迭代器的rbegin()
             return reverse_iterator(end());
         }
 
