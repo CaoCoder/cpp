@@ -2,23 +2,24 @@
 #pragma once//防止头文件被包含
 #include <iostream>
 using namespace std;
-
+#include <windows.h>
 #include <WinSock.h>
 #include <mysql.h>
 //将注册的账号密码写入文件
-void WriteCode(int a,int b, int c)
+void WriteCode(int a, char c[])
 {
     //打开文件
-    FILE* pf = fopen("code.txt", "w");
+    FILE* pf = fopen("code.txt", "a");
     if (pf == NULL)
     {
         printf("保存失败\n");
         return;
     }
     //向文件传输数据
-    int id = a, nummber =b , code = c;
-        fprintf(pf, "%d %d %d\n", id, nummber, code);
-    
+    int id = a;
+    const char* code = c;
+    fprintf(pf, "%d %s\n", id, code);
+
     //关闭文件
     fclose(pf);
     pf = NULL;
@@ -32,7 +33,8 @@ int WriteCodeMysql()
     const char* query;
     const char* filename = "code.txt";
     FILE* fp;
-    int id,nummber,code;
+    int id;
+    char code[30];
     // 打开文件
     fp = fopen(filename, "r");
     if (fp == NULL) {
@@ -57,32 +59,36 @@ int WriteCodeMysql()
     }
 
     // 先清空数据库
-    query = "DELETE FROM Code";
+    query = "DELETE FROM code";
     mysql_query(conn, query);
     // 读取文件中的数据
-    while (fscanf(fp, "%d%d%d",
-        &id,&nummber,&code) != EOF)
+    while (fscanf(fp, "%d%s",
+        &id, code) != EOF)
     {
         // 构造插入语句
-        query = "INSERT INTO Code (id, nummber, code) VALUES (?,?, ?)";
+        query = "INSERT INTO code (id, code) VALUES (?, ?)";
         // 准备插入语句
+
         stmt = mysql_stmt_init(conn);
         if (mysql_stmt_prepare(stmt, query, strlen(query)) != 0) {
             printf("Error preparing statement!\n");
             return -1;
         }
         // 执行插入语句
-        MYSQL_BIND bind[3];
+        MYSQL_BIND bind[2];
         memset(bind, 0, sizeof(bind));
-        
+
 
         bind[0].buffer_type = MYSQL_TYPE_LONG;
         bind[0].buffer = &id;
-        bind[1].buffer_type = MYSQL_TYPE_LONG;
-        bind[1].buffer = &nummber;
-        bind[2].buffer_type = MYSQL_TYPE_LONG;
-        bind[2].buffer = &code;
-      
+
+
+        bind[1].buffer_type = MYSQL_TYPE_STRING;
+        bind[1].buffer = (char*)code;
+        bind[1].buffer_length = strlen(code);
+
+
+
         mysql_stmt_bind_param(stmt, bind);
         mysql_stmt_execute(stmt);
     }
@@ -280,7 +286,7 @@ void WriteData(Node* phead)
     }
     //向文件传输数据
     Node* cur = phead->next;
-   
+
     while (cur != phead)
     {
         fprintf(pf, "%s %d %d %d %d %d\n", cur->val.name, cur->val.id, cur->val.clas,
@@ -326,7 +332,7 @@ void ReadData(Node* phead)
 
     //对文件进行格式化读取
     Node* tail = phead->prev;
-   
+
     while (fscanf(pf, "%s %d %d %d %d %d\n", newNode->val.name, &newNode->val.id, &newNode->val.clas,
         &newNode->val.s.math, &newNode->val.s.english, &newNode->val.s.physics) != EOF)
     {
@@ -423,6 +429,19 @@ void push_back(Node* phead, ListDataType x)
 {
     assert(phead);
     Node* newNode = BuynewNode(x);
+    Node* cur = phead->next;
+    while (cur != phead)
+    {
+        if (newNode->val.id != cur->val.id)
+        {
+            cur = cur->next;
+        }
+        else
+        {
+            printf("error!  输入重复学号 ！\n");
+            return;
+        }
+    }
     Node* tail = phead->prev;
 
     //phead==tail ->newNode 
@@ -554,51 +573,55 @@ void cal(Node* phead)
 
 void menu()
 {
-	printf("***************************\n");
-	printf("***************************\n");
-	printf("******1.管理员界面：   ****\n");
-	printf("******2.老师界面：     ****\n");
-	printf("******3.学生界面：     ****\n");
-	printf("***************************\n");
-	printf("***************************\n");
-	printf("请选择(1-3):");
+    printf("***************************\n");
+    printf("***************************\n");
+    printf("******1.管理员界面：   ****\n");
+    printf("******2.老师界面：     ****\n");
+    printf("******3.学生界面：     ****\n");
+    printf("***************************\n");
+    printf("***************************\n");
+    printf("请选择(1-3):");
 }
 
 void AdminMenu()
 {
-	printf("*****欢迎来到管理员界面****\n");
-	printf("***************************\n");
-	printf("***************************\n");
-	printf("******1.添加学生信息   ****\n");
-	printf("******2.修改学生信息   ****\n");
-	printf("******3.删除学生信息   ****\n");
-	printf("******4.查询学生信息   ****\n");
-	printf("******5.显示学生信息   ****\n");
-	printf("******6.返        回   ****\n");
-	printf("***************************\n");
-	printf("***************************\n");
-	printf("请选择(1-6):");
+    printf("*****欢迎来到管理员界面****\n");
+    printf("***************************\n");
+    printf("***************************\n");
+    printf("******1.添加学生信息   ****\n");
+    printf("******2.修改学生信息   ****\n");
+    printf("******3.删除学生信息   ****\n");
+    printf("******4.查询学生信息   ****\n");
+    printf("******5.显示学生信息   ****\n");
+    printf("******6.返        回   ****\n");
+    printf("***************************\n");
+    printf("***************************\n");
+    printf("请选择(1-6):");
 
 }
 
 void Admin(Node* phead)
 {
-	stu st = { "张三",1,1,1,1,1 };
-	int n = 0;
-	do
-	{
-		AdminMenu();
-		scanf("%d", &n);
-		switch (n)
-		{
-		case 1:
-			push_back(phead, st);
-			break;
-		case 2:
-			Modify(phead, Find(phead));
+    stu st = { "张三",1,1,1,1,1 };
+    int n = 0;
+    do
+    {
+        AdminMenu();
+        scanf("%d", &n);
+        switch (n)
+        {
+        case 1:
+            system("cls");
+            Sleep(2000);
+            push_back(phead, st);
+            break;
+        case 2:
+            system("cls");
+            Sleep(2000);
+            Modify(phead, Find(phead));
             while (1)
             {
-                char s[20] = {0};
+                char s[20] = { 0 };
                 printf("是否还要继续修改?请输入:(yes/no)\n");
                 scanf("%s", s);
                 if (strcmp(s, "yes") == 0)
@@ -611,80 +634,98 @@ void Admin(Node* phead)
                     break;
                 }
             }
-			break;
-		case 3:
-			Erease(phead, Find(phead));
-			break;
-		case 4:
-			Find(phead);
-			break;
-		case 5:
-			ListPrint(phead);
-			break;
-		case 6:
-			return;
-			break;
-		default:
-			printf("输入格式错误请重新输入\n");
-			break;
-		}
-	} while (n);
+            break;
+        case 3:
+            system("cls");//清屏
+            Sleep(1500);//睡眠
+            Erease(phead, Find(phead));//删除学生
+            break;
+        case 4:
+            system("cls");
+            Sleep(2000);
+            Find(phead);
+            break;
+        case 5:
+            system("cls");
+            Sleep(2000);
+            ListPrint(phead);
+            break;
+        case 6:
+            system("cls");
+            Sleep(2000);
+            return;
+            break;
+        default:
+            printf("输入格式错误请重新输入\n");
+            break;
+        }
+    } while (n);
 }
 void TeacherMenu()
 {
-	printf("*****欢迎来到老师界面******\n");
-	printf("***************************\n");
-	printf("***************************\n");
-	printf("******1.查看学生信息   ****\n");
-	printf("******2.修改学生成绩   ****\n");
-	printf("******3.查看成绩情况   ****\n");
-	printf("******4.返回主菜单     ****\n");
-	printf("***************************\n");
-	printf("***************************\n");
-	printf("请选择(1-4):");
+    printf("*****欢迎来到老师界面******\n");
+    printf("***************************\n");
+    printf("***************************\n");
+    printf("******1.查看学生信息   ****\n");
+    printf("******2.修改学生成绩   ****\n");
+    printf("******3.查看成绩情况   ****\n");
+    printf("******4.返回主菜单     ****\n");
+    printf("***************************\n");
+    printf("***************************\n");
+    printf("请选择(1-4):");
 
 }
 
 void Teacher(Node* phead)
 {
-	stu st = { "张三",1,1,1,1,1 };
-	int n = 0;
-	do
-	{
-		TeacherMenu();
-		scanf("%d", &n);
-		switch (n)
-		{
-		case 1:
-			Find(phead);
-			break;
-		case 2:
-			Modify(phead, Find(phead));
-			break;
-		case 3:
-			ListPrint(phead);
-			break;
-		case 4:
-			return;
-			break;
-		default:
-			printf("输入格式错误请重新输入\n");
-			break;
-		}
-	} while (n);
+    stu st = { "张三",1,1,1,1,1 };
+    int n = 0;
+    do
+    {
+        TeacherMenu();
+        scanf("%d", &n);
+        switch (n)
+        {
+        case 1:
+            system("cls");
+            Sleep(2000);
+            Find(phead);
+            break;
+        case 2:
+            system("cls");
+            Sleep(2000);
+            Modify(phead, Find(phead));
+            break;
+        case 3:
+            system("cls");
+            Sleep(2000);
+            ListPrint(phead);
+            break;
+        case 4:
+            system("cls");
+            Sleep(2000);
+            return;
+            break;
+        default:
+            system("cls");
+            Sleep(2000);
+            printf("输入格式错误请重新输入\n");
+            break;
+        }
+    } while (n);
 }
 
 void StudentMenu()
 {
-	printf("*****欢迎来到学生界面******\n");
-	printf("***************************\n");
-	printf("***************************\n");
-	printf("******1.注册账号       ****\n");
-	printf("******2.查看自己成绩   ****\n");
-    printf("******3.返回主菜单     ****\n");
-	printf("***************************\n");
-	printf("***************************\n");
-	printf("请选择(1-3):");
+    printf("                            *****欢迎来到学生界面******\n");
+    printf("                            ***************************\n");
+    printf("                            ***************************\n");
+    printf("                            ******1.注册账号       ****\n");
+    printf("                            ******2.查看自己成绩   ****\n");
+    printf("                            ******3.返回主菜单     ****\n");
+    printf("                            ***************************\n");
+    printf("                            ***************************\n");
+    printf("                            请选择(1-3):");
 
 }
 
@@ -692,17 +733,18 @@ void Login(Node* phead)
 {
 
     int id = 0;
-    int nummber = 0;
-    int code = 0;
+
+    char code[20] = { 0 };
+
     printf("请输入学号：");
     scanf("%d", &id);
-    printf("请输入账号：");
-    scanf("%d", &nummber);
     printf("请输入密码：");
-    scanf("%d", &code);
+    scanf("%s", code);
 
-    WriteCode(id, nummber, code);
+    WriteCode(id, code);
     WriteCodeMysql();
+
+    system("cls");
 }
 int Print(Node* phead)
 {
@@ -713,8 +755,8 @@ int Print(Node* phead)
 
     const char* server = "localhost";
     const char* user = "root";
-   const char* password = "721229";
-   const char* database = "test";
+    const char* password = "721229";
+    const char* database = "test";
 
     conn = mysql_init(NULL);
 
@@ -723,7 +765,7 @@ int Print(Node* phead)
         return 1;
     }
 
-    if (mysql_query(conn, "SELECT * FROM Code LIMIT 1")) {
+    if (mysql_query(conn, "SELECT * FROM Code")) {
         printf("Error: %s\n", mysql_error(conn));
         return 1;
     }
@@ -731,25 +773,50 @@ int Print(Node* phead)
     res = mysql_use_result(conn);
     row = mysql_fetch_row(res);
 
-    printf("First data in first row: %s\n", row[0]);
+    int id = 0;
 
-  
-   
-    Node* cur = phead->next;
-    printf("%-9s\t%-9s\t%-9s\t%-9s\t%-9s\t%-9s\n", "姓名", "学号", "班级", "数学", "英语", "物理");
-    while (cur != phead)
+    char code[20] = { 0 };
+    printf("请输入学号：");
+    scanf("%d", &id);
+
+    printf("请输入密码：");
+    scanf("%s", code);
+
+
+    while (row)
     {
         char str[20];
-        _itoa(cur->val.id, str, 10);
-        if (strcmp(str, row[0])==0)
-        {
-            printf("%-9s\t%-9d\t%-9d\t%-9d\t%-9d\t%-9d\n", cur->val.name, cur->val.id, cur->val.clas,
-                cur->val.s.math, cur->val.s.english, cur->val.s.physics);
-            break;
-        }
 
-        cur = cur->next;
+        _itoa(id, str, 10);
+
+        if (strcmp(str, row[0]) == 0)
+        {
+            Node* cur = phead->next;
+
+            while (cur != phead)
+            {
+
+                _itoa(cur->val.id, str, 10);
+                if (strcmp(str, row[0]) == 0 && strcmp(code, row[1]) == 0)
+                {
+                    printf("%-9s\t%-9s\t%-9s\t%-9s\t%-9s\t%-9s\n", "姓名", "学号", "班级", "数学", "英语", "物理");
+                    printf("%-9s\t%-9d\t%-9d\t%-9d\t%-9d\t%-9d\n", cur->val.name, cur->val.id, cur->val.clas,
+                        cur->val.s.math, cur->val.s.english, cur->val.s.physics);
+
+                    mysql_free_result(res);
+                    mysql_close(conn);
+                    return 1;
+                }
+
+                cur = cur->next;
+            }
+        }
+        row = mysql_fetch_row(res);
     }
+    printf("无此学生或账号密码不正确\n");
+
+    Sleep(2000);
+    system("cls");
 
     mysql_free_result(res);
     mysql_close(conn);
@@ -757,98 +824,112 @@ int Print(Node* phead)
 }
 void Student(Node* phead)
 {
-	stu st = { "张三",1,1,1,1,1 };
-	int n = 0;
-	do
-	{
-		StudentMenu();
-		scanf("%d", &n);
-		switch (n)
-		{
-		case 1:
+    stu st = { "张三",1,1,1,1,1 };
+    int n = 0;
+    do
+    {
+        StudentMenu();
+        scanf("%d", &n);
+        switch (n)
+        {
+        case 1:
+            system("cls");
+            Sleep(2000);
             Login(phead);
 
-			break;
-		case 2:
+            break;
+        case 2:
+            system("cls");
+            Sleep(2000);
             Print(phead);
-			break;
+            break;
         case 3:
+            system("cls");
+            Sleep(2000);
             return;
             break;
-		default:
-			printf("输入格式错误请重新输入\n");
-			break;
-		}
-	} while (n);
+        default:
+            printf("输入格式错误请重新输入\n");
+            break;
+        }
+    } while (n);
 }
 int main()
 {
-	
-	
-	int n = 0;
-	Node* phead = NULL;
-	ListNodeInit(&phead);
 
-	ReadData(phead);//链接并读取数据库信息
 
-	const char* ma = "123";
-	const char* mb = "1234";
+    int n = 0;
+    Node* phead = NULL;
+    ListNodeInit(&phead);
 
-	char a[20];
-	char b[20];
-	char c[20];
-	do
-	{
-		menu();
-		scanf("%d", &n);
-		switch (n)
-		{
-		case 1:
-			printf("请输入密码：");
-			scanf("%s", a);
-			if (strcmp(ma, a) == 0)
-			{
-				Admin(phead);
-			}
-			else
-			{
-				printf("密码输入错误请重新输入\n");
-			}
-			break;
-		case 2:
-			printf("请输入密码：");
-			scanf("%s", b);
-			if (strcmp(mb, b) == 0)
-			{
-				Teacher(phead);
-			}
-			else
-			{
-				printf("密码输入错误请重新输入\n");
-			}
+    ReadData(phead);//链接并读取数据库信息
 
-			break;
-		case 3:
+    const char* ma = "123";
+    const char* mb = "1234";
+
+    char a[20];
+    char b[20];
+    char c[20];
+    do
+    {
+        menu();
+        scanf("%d", &n);
+        switch (n)
+        {
+        case 1:
+            printf("请输入密码：");
+            scanf("%s", a);
+            if (strcmp(ma, a) == 0)
+            {
+                system("cls");
+                Sleep(2000);
+                Admin(phead);
+
+            }
+            else
+            {
+
+                printf("密码输入错误请重新输入\n");
+            }
+            break;
+        case 2:
+            printf("请输入密码：");
+            scanf("%s", b);
+            if (strcmp(mb, b) == 0)
+            {
+                system("cls");
+                Sleep(2000);
+                Teacher(phead);
+            }
+            else
+            {
+                printf("密码输入错误请重新输入\n");
+            }
+
+            break;
+        case 3:
+            system("cls");
+            Sleep(2000);
             Student(phead);
 
-		/*	printf("请输入密码：");
-			scanf("%s", c);
-			if (strcmp(mc, c) == 0)
-			{
-				Student(phead);
-			}
-			else
-			{
-				printf("密码输入错误请重新输入\n");
-			}*/
+            /*	printf("请输入密码：");
+                scanf("%s", c);
+                if (strcmp(mc, c) == 0)
+                {
+                    Student(phead);
+                }
+                else
+                {
+                    printf("密码输入错误请重新输入\n");
+                }*/
 
-			break;
+            break;
 
-		default:
-			printf("输入格式错误请重新输入\n");
-			break;
-		}
-	} while (n);
-	return 0;
+        default:
+            printf("输入格式错误请重新输入\n");
+            break;
+        }
+    } while (n);
+    return 0;
 }
 
