@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32804.467
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BSTree", "BSTree\BSTree.vcxproj", "{02F5CF1C-D9B5-48B6-BCA0-695AD0576F39}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{02F5CF1C-D9B5-48B6-BCA0-695AD0576F39}.Debug|x64.ActiveCfg = Debug|x64
+		{02F5CF1C-D9B5-48B6-BCA0-695AD0576F39}.Debug|x64.Build.0 = Debug|x64
+		{02F5CF1C-D9B5-48B6-BCA0-695AD0576F39}.Debug|x86.ActiveCfg = Debug|Win32
+		{02F5CF1C-D9B5-48B6-BCA0-695AD0576F39}.Debug|x86.Build.0 = Debug|Win32
+		{02F5CF1C-D9B5-48B6-BCA0-695AD0576F39}.Release|x64.ActiveCfg = Release|x64
+		{02F5CF1C-D9B5-48B6-BCA0-695AD0576F39}.Release|x64.Build.0 = Release|x64
+		{02F5CF1C-D9B5-48B6-BCA0-695AD0576F39}.Release|x86.ActiveCfg = Release|Win32
+		{02F5CF1C-D9B5-48B6-BCA0-695AD0576F39}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C45CC789-3D01-4F25-9338-7C5BDF521873}
+	EndGlobalSection
+EndGlobal
