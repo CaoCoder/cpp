@@ -1,64 +1,58 @@
-#define _CRT_SECURE_NO_WARNINGS 1
 #include<iostream>
-#include<cstdio>
-#include<cstring>
-
+#include<algorithm>
 using namespace std;
-void fun(char* s, char* t1, char* t2, char* w)
-{
-	char* p, * r, * a;
-	strcpy(w, s);
-	//开始准备替换
-	while (*w)
-	{
-		p = w;
-		r = t1;
-		while (*r)//错误1,在于r是一个指针变量，里面存储的是地址。
-		{
-			if (*r == *p)
-			{
-				r++;
-				p++;
-			}
-			else
-			{
-				break;
-			}
-		}
-		//开始替换
-		if (*r == '\0')
-		{
-			a = w;
-			r = t2;
-			while (*r)
-			{
-				*a = *r;
-				a++;
-				r++;
-			}
-			w += strlen(t2);
-		}
-		else
-			w++;
-	}
 
+const int maxn = 1010;
+const int maxm = 10010;
+int n, m;//n个顶点，m条边
+int p[maxn];//记录i的父节点是p[i]
+int ans;//记录最小代价 
+int cnt;//记录最小生成树边数 
+int k;
+struct edge
+{
+	int u, v, w;
+}e[maxm];
+
+bool cmp(edge a, edge b)//升序排序 
+{
+	return a.w < b.w;
+}
+int find(int x)//找节点的根节点 
+{
+	if (p[x] != x) 
+		p[x] = find(p[x]);
+	return p[x];
+}
+void kruskal()
+{
+	for (int i = 1; i <= n; i++)//初始化p[i] 
+	{
+		p[i] = i;
+	}
+	sort(e, e + m, cmp);//对边进行从小到达排序 
+	for (int i = 0; i < m; i++)
+	{
+		int root1 = find(e[i].u);
+		int root2 = find(e[i].v);
+		if (root1 != root2)
+		{
+			p[root1] = root2;
+			ans += e[i].w;
+			cnt++;
+			if (cnt == n - k)  break;
+		}
+	}
+	if (cnt == n - k) cout << ans << endl;
+	else cout << "No Answer";
 }
 int main()
 {
-	char s[100], t1[100], t2[100], w[100];
-	cout << "请输入s字符串";
-	cin.getline(s, 100);
-	cout << "请输入子串1";
-	cin.getline(t1, 100);
-	cout << "请输入子串2";
-	cin.getline(t2, 100);
-	if (strlen(t1) == strlen(t2))
+	cin >> n >> m >> k;
+	for (int i = 0; i < m; i++)
 	{
-		fun(s, t1, t2, w);
-		cout << "结果是" << w;
+		cin >> e[i].u >> e[i].v >> e[i].w;
 	}
-	else
-	{
-		cout << "t1长度不等于t2" << endl;
-	}
+	kruskal();
+	return 0;
 }
