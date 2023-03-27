@@ -205,3 +205,116 @@ namespace CloseHash
 	}
 }
 
+
+//开散列 哈希桶
+namespace Bucket
+{
+	template<class K, class V>
+	struct HashNode
+	{
+		pair<K, V> _kv;
+		HashNode<K, V>* _next;
+
+		HashNode(const pair<K, V>& kv)
+			:_kv(kv)
+			,_next(nullptr)
+		{}
+	};
+
+	template<class K, class V>
+	class HashTable
+	{
+		typedef HashNode<K, V> Node;
+	public:
+		bool Insert(const pair<K, V>& kv)
+		{
+
+			//负载因子等于1，就扩容
+			if (_tables.size() == _n)
+			{
+				size_t newSize = _tables.size() == 0 ? 10 : _tables.size() * 2;
+				HashTable<K, V> newHT;
+				newHT._tables.resize(newSize, nullptr);
+
+				for (size_t i = 0; i < _tables.size(); ++i)
+				{
+					Node* cur = _tables[i];
+					while (cur)
+					{
+						newHT.Insert(cur->_kv);
+						cur = cur->_next;
+					}
+				}
+
+				newHT._tables.swap(_tables);
+			}
+
+
+			size_t hashi = kv.first;
+			hashi %= _tables.size();
+			
+			//头插入相应的桶即可
+			Node* newnode = new Node(kv);
+			newnode->_next = _tables[hashi];
+			_tables[hashi] = newnode;
+
+			++_n;
+			return true;
+		}
+
+
+		Node* Find(const K& key)
+		{
+			if (_tables.size() == 0)
+			{
+				return nullptr;
+			}
+
+			size_t hashi = key;
+			hashi %= _tables.size();
+			Node* cur = _tables[hashi];
+			
+			while (cur)
+			{
+				if (cur->_kv.first == key)
+				{
+					return cur;
+				}
+
+				cur = cur->_next;
+			}
+
+			return nullptr;
+		}
+	private:
+		//指针数组
+		vector<Node*> _tables;
+		size_t _n = 0;//存储容量
+	};
+
+	void TestHT1()
+	{
+		int a[] = { 20, 5, 8, 99999, 10, 30, 50 };
+		//HashTable<int, int, DefaultHash<int>> ht;
+		HashTable<int, int> ht;
+
+		if (ht.Find(10))
+		{
+			cout << "找到了10" << endl;
+		}
+
+		for (auto e : a)
+		{
+			ht.Insert(make_pair(e, e));
+		}
+
+		// 测试扩容
+		ht.Insert(make_pair(15, 15));
+		ht.Insert(make_pair(5, 5));
+		ht.Insert(make_pair(15, 15));
+		ht.Insert(make_pair(25, 15));
+		ht.Insert(make_pair(35, 15));
+		ht.Insert(make_pair(45, 15));
+	}
+
+}
