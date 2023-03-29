@@ -1,5 +1,2 @@
 ﻿  test.cpp
-E:\cpp代码\cpp\zuo_ti\简单做题的代码\test.cpp(20,8): warning C4477: “scanf”: 格式字符串“%f”需要类型“float *”的参数，但可变参数 1 拥有了类型“double *”
-E:\cpp代码\cpp\zuo_ti\简单做题的代码\test.cpp(20,8): message : 请考虑在格式字符串中使用“%lf”
-E:\cpp代码\cpp\zuo_ti\简单做题的代码\test.cpp(21,8): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
   简单做题的代码.vcxproj -> E:\cpp代码\cpp\zuo_ti\x64\Debug\简单做题的代码.exe
