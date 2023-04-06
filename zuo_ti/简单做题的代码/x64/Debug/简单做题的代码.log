@@ -1,2 +1,4 @@
-﻿  test.cpp
+﻿  test.c
+  test.cpp
+E:\cpp代码\cpp\zuo_ti\简单做题的代码\test.cpp(37,23): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
   简单做题的代码.vcxproj -> E:\cpp代码\cpp\zuo_ti\x64\Debug\简单做题的代码.exe

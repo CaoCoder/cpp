@@ -1,139 +1,210 @@
-﻿#define _CRT_SECURE_NO_WARNINGS 1
+﻿#include <iostream>
+#include <cmath>
+#include <algorithm>
+using namespace std;
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <limits.h>
+class Fraction {
 
-// 定义图中顶点数量
-#define VERTICES 5
+private:
+    int numerator;          // 分子
+    int denominator;        // 分母
 
-// 定义地点信息结构体
-typedef struct {
-    int id;
-    char name[20];
-} Location;
+public:
+    int _gcd(int a, int b) {
+        if (b == 0) {
+            return a;
+        }
+        else {
+            return _gcd(b, a % b);
+        }
+    }
+    // 构造函数
+    Fraction() {
+        numerator = 0;
+        denominator = 1;
+    }
+    //小数转化为分数
+    Fraction(double n) 
+    {
+        int sign = (n > 0) ? 1 : -1;
+        n = fabs(n); // 取绝对值
+        int integerPart = static_cast<int>(n); // 小数的整数部分
+        double decimalPart = n - integerPart; // 小数的小数部分
+        int multiple = 1;
+        while (fabs(decimalPart - round(decimalPart)) > 2e8) {
+            decimalPart *= 10;
+            multiple *= 10;
+        }
+        int numerator = round(decimalPart);
+        int denominator = multiple;
+        int gcd = _gcd(numerator, denominator); // 求最大公约数
+        numerator /= gcd;
+        denominator /= gcd;
+        this->numerator = sign * (integerPart * denominator + numerator);
+        this->denominator = denominator;
+    }
+    // 有参数的构造函数
+    Fraction(int n, int d) {
+        numerator = n;
+        denominator = d;
+        reduce();           // 将该分数约分为最简分数形式
+    }
 
-// 函数声明
-void printCampusMap();
-void findShortestPath(int source, int destination, int graph[VERTICES][VERTICES]);
-int minDistance(int dist[], int sptSet[]);
+    // 求取两数的最大公因数（欧几里得算法）
+    int gcd(int a, int b) {
+        if (b == 0) {
+            return a;
+        }
+        return gcd(b, a % b);
+    }
 
-// 地点信息数组
-Location locations[VERTICES] = {
-    {0, "图书馆"},
-    {1, "教学楼"},
-    {2, "食堂"},
-    {3, "宿舍"},
-    {4, "体育馆"}
+    // 约分函数，将该分数约分为最简分数形式
+    void reduce() {
+        int gcd_val = gcd(numerator, denominator);
+        numerator /= gcd_val;
+        denominator /= gcd_val;
+
+        // 如果分母为负数，则将分子和分母都取反，保证分数为负数形式
+        if (denominator < 0) {
+            numerator = -numerator;
+            denominator = -denominator;
+        }
+    }
+
+    // 返回分数的double类型表示
+    double to_double() const {
+        return numerator / (double)denominator;
+    }
+
+    // 输出分数
+    friend ostream& operator<<(ostream& os, const Fraction& f) {
+        os << f.numerator << "/" << f.denominator;
+        return os;
+    }
+
+    // 输入分数
+    friend istream& operator>>(istream& is, Fraction& f) {
+        char slash;
+        is >> f.numerator >> slash >> f.denominator;
+        f.reduce();
+        return is;
+    }
+
+    // 分数加法重载
+    friend Fraction operator+(const Fraction& f1, const Fraction& f2) {
+        int n = f1.numerator * f2.denominator + f2.numerator * f1.denominator;
+        int d = f1.denominator * f2.denominator;
+        return Fraction(n, d);
+    }
+
+    // 分数减法重载
+    friend Fraction operator-(const Fraction& f1, const Fraction& f2) {
+        int n = f1.numerator * f2.denominator - f2.numerator * f1.denominator;
+        int d = f1.denominator * f2.denominator;
+        return Fraction(n, d);
+    }
+    // 分数乘法重载
+    friend Fraction operator*(const Fraction& f1, const Fraction& f2) {
+        int n = f1.numerator * f2.numerator;
+        int d = f1.denominator * f2.denominator;
+        return Fraction(n, d);
+    }
+
+    // 分数除法重载
+    friend Fraction operator/(const Fraction& f1, const Fraction& f2) {
+        int n1 = f1.numerator * f2.denominator;
+        int d1 = f1.denominator * f2.numerator;
+        return Fraction(n1, d1);
+    }
+
+    // 分数加上整数重载
+    friend Fraction operator+(const Fraction& f1, int n) {
+        Fraction f2(n, 1);
+        return f1 + f2;
+    }
+
+    // 分数减去整数重载
+    friend Fraction operator-(const Fraction& f1, int n) {
+        Fraction f2(n, 1);
+        return f1 - f2;
+    }
+
+    // 分数乘以整数重载
+    friend Fraction operator*(const Fraction& f1, int n) {
+        Fraction f2(n, 1);
+        return f1 * f2;
+    }
+
+    // 分数除以整数重载
+    friend Fraction operator/(const Fraction& f1, int n) {
+        Fraction f2(1, n);
+        return f1 / f2;
+    }
+
+    // 整数加上分数重载
+    friend Fraction operator+(int n, const Fraction& f1) {
+        Fraction f2(n, 1);
+        return f2 + f1;
+    }
+
+    // 整数减去分数重载
+    friend Fraction operator-(int n, const Fraction& f1) {
+        Fraction f2(n, 1);
+        return f2 - f1;
+    }
+
+    // 整数乘以分数重载
+    friend Fraction operator*(int n, const Fraction& f1) {
+        Fraction f2(n, 1);
+        return f2 * f1;
+    }
+
+    // 整数除以分数重载
+    friend Fraction operator/(int n, const Fraction& f1) {
+        Fraction f2(n, 1);
+        return f2 / f1;
+    }
 };
-
-// 邻接矩阵表示图
-int graph[VERTICES][VERTICES] = {
-    {0, 10, 20, 0, 0},
-    {10, 0, 0, 50, 10},
-    {20, 0, 0, 20, 0},
-    {0, 50, 20, 0, 0},
-    {0, 10, 0, 0, 0}
-};
-
+// 主函数
 int main() {
-    int choice;
-    int source, destination;
+    Fraction f1(1, 2);
+    Fraction f2(3, 4);
+    Fraction f3(0.6);
 
-    while (1) {
-        printf("\n校园导航图系统\n");
-        printf("1. 查看学校平面图\n");
-        printf("2. 查看地点信息\n");
-        printf("3. 查找两点间最短路径\n");
-        printf("4. 退出程序\n");
-        printf("请选择操作（1-4）: ");
-        scanf("%d", &choice);
+    // 输出分数
+    cout << "f1 = " << f1 << endl;
+    cout << "f2 = " << f2 << endl;
+    cout << "f3 = " << f3 << endl;
 
-        switch (choice) {
-        case 1:
-            printCampusMap();
-            break;
-        case 2:
-            printf("地点列表：\n");
-            for (int i = 0; i < VERTICES; i++) {
-                printf("%d: %s\n", locations[i].id, locations[i].name);
-            }
-            break;
-        case 3:
-            printf("请输入出发地点ID: ");
-            scanf("%d", &source);
-            printf("请输入目的地ID: ");
-            scanf("%d", &destination);
-            findShortestPath(source, destination, graph);
-            break;
-        case 4:
-            exit(0);
-            break;
-        default:
-            printf("输入错误，请重新输入。\n");
-            break;
-        }
-    }
+    // 输出分数运算结果
+    cout << "f1 + f2 = " << f1 + f2 << endl;
+    cout << "f1 - f2 = " << f1 - f2 << endl;
+    cout << "f1 * f2 = " << f1 * f2 << endl;
+    cout << "f1 / f2 = " << f1 / f2 << endl;
+
+    // 输出分数与整数运算结果
+    cout << "f1 + 1 = " << f1 + 1 << endl;
+    cout << "f1 - 1 = " << f1 - 1 << endl;
+    cout << "f1 * 2 = " << f1 * 2 << endl;
+    cout << "f1 / 2 = " << f1 / 2 << endl;
+
+    // 输出整数与分数运算结果
+    cout << "1 + f2 = " << 1 + f2 << endl;
+    cout << "1 - f2 = " << 1 - f2 << endl;
+    cout << "2 * f1 = " << 2 * f1 << endl;
+    cout << "2 / f1 = " << 2 / f1 << endl;
+
+    // 将分数的值赋给f3
+    f3 = f1 + f2 * 2;
+    cout << "f3 = " << f3 << endl;
+
+    // 将复合运算结果赋给f3
+    f3 = 2 * f1 + 3 / f2;
+    cout << "f3 = " << f3 << endl;
+
+    // 输出分数的double表示
+    double d = f1.to_double();
+    cout << "double value of f1 = " << d << endl;
+
     return 0;
-}
-
-void printCampusMap() {
-    printf("学校平面图（数字表示地点ID）：\n\n");
-    printf("  0---1---4\n");
-    printf("  |       |\n");
-    printf("  2-------3\n\n");
-}
-
-void findShortestPath(int source, int destination, int graph[VERTICES][VERTICES]) {
-    int dist[VERTICES];
-    int sptSet[VERTICES];
-    int parent[VERTICES];
-
-    for (int i = 0; i < VERTICES; i++) {
-        dist[i] = INT_MAX;
-        sptSet[i] = 0;
-        parent[i] = -1;
-    }
-
-    dist[source] = 0;
-
-    for (int count = 0; count < VERTICES - 1; count++) {
-        int u = minDistance(dist, sptSet);
-        sptSet[u] = 1;
-
-        for (int v = 0; v < VERTICES; v++) {
-            if (!sptSet[v] && graph[u][v] && dist[u] != INT_MAX && dist[u] + graph[u][v] < dist[v]) {
-                dist[v] = dist[u] + graph[u][v];
-                parent[v] = u;
-            }
-        }
-    }
-
-    printf("最短路径为：\n");
-    int path[VERTICES];
-    int path_index = 0;
-
-    for (int i = destination; i != -1; i = parent[i]) {
-        path[path_index++] = i;
-    }
-
-    for (int i = path_index - 1; i > 0; i--) {
-        printf("%s -> ", locations[path[i]].name);
-    }
-    printf("%s\n", locations[path[0]].name);
-
-    int distance = dist[destination];
-    printf("总距离: %d\n", distance);
-}
-int minDistance(int dist[], int sptSet[]) {
-    int min = INT_MAX, min_index;
-
-    for (int v = 0; v < VERTICES; v++) {
-        if (!sptSet[v] && dist[v] <= min) {
-            min = dist[v];
-            min_index = v;
-        }
-    }
-
-    return min_index;
 }
