@@ -1,38 +1,33 @@
-//#include?<stdio.h>
-//#include?<stdlib.h>
-//int?main()
-//{
-//	long?long????int?x, l, j = 0, c, i = 0;
-//	int?a[100], b[100];
-//	scanf("%lld", &x);//有几组数据
-//p:
-//	while (j < x) {
-//		scanf("%lld", &l);
-//		goto?s;
-//	}
-//s:
-//	for (int?i = 0; i < l; i++) {
-//		scanf("%d", &a[i]);
-//
-//	}
-//	c = 0;
-//	for (int?i = 0; i < l; i++) {
-//		if (a[i] % 2 != 0) {
-//			c++;
-//		}
-//	}
-//	if (i < l) {
-//		b[i] = c;
-//		i++;
-//	}
-//	j++;
-//	while (j < x) {
-//		goto?p;
-//	}
-//
-//	for (int?i = 0; i < x; i++) {
-//		printf("%d\t", b[i]);
-//	}
-//
-//	return?0;
-//}
+#define  _CRT_SECURE_NO_WARNINGS
+#include <stdlib.h>
+#include <stdio.h>
+int main() {
+    long long int x, y;
+    long long int sum = 0;
+    scanf("%lld", &x);//有几组
+    long long int* a = (long long int* )malloc(sizeof(int) * 100001 * 3);
+
+    for (int i = 0; i < x * 3; i++)
+    {
+        scanf("%lld", &a[i]);
+    }
+    for (int i = 0; i < 3 * x; i++)
+    {
+        for (int j = i + 1; j < 3 * x; j++) {
+            if (a[j] > a[i]) {
+                y = a[i];
+                a[i] = a[j];
+                a[j] = y;
+            }
+        }
+    }
+    for (int i = 1; 2 * i <= 2 * x; i++)
+    {
+        sum = a[2 * i - 1] + sum;
+    }
+    printf("%lld", sum);
+
+    free(a);
+    a = NULL;
+    return 0;
+}
