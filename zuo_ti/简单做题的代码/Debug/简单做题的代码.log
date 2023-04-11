@@ -1,20 +1,2 @@
 ﻿  test.c
-E:\cpp代码\cpp\zuo_ti\简单做题的代码\test.c(7,9): warning C4477: “printf”: 格式字符串“%d”需要类型“int”的参数，但可变参数 1 拥有了类型“__int64”
-E:\cpp代码\cpp\zuo_ti\简单做题的代码\test.c(7,9): message : 请考虑在格式字符串中使用“%lld”
-E:\cpp代码\cpp\zuo_ti\简单做题的代码\test.c(7,9): message : 请考虑在格式字符串中使用“%I64d”
-E:\cpp代码\cpp\zuo_ti\简单做题的代码\test.c(7,9): warning C4477: “printf”: 格式字符串“%d”需要类型“int”的参数，但可变参数 2 拥有了类型“__int64”
-E:\cpp代码\cpp\zuo_ti\简单做题的代码\test.c(7,9): message : 请考虑在格式字符串中使用“%lld”
-E:\cpp代码\cpp\zuo_ti\简单做题的代码\test.c(7,9): message : 请考虑在格式字符串中使用“%I64d”
-E:\cpp代码\cpp\zuo_ti\简单做题的代码\test.c(7,9): warning C4477: “printf”: 格式字符串“%d”需要类型“int”的参数，但可变参数 3 拥有了类型“__int64”
-E:\cpp代码\cpp\zuo_ti\简单做题的代码\test.c(7,9): message : 请考虑在格式字符串中使用“%lld”
-E:\cpp代码\cpp\zuo_ti\简单做题的代码\test.c(7,9): message : 请考虑在格式字符串中使用“%I64d”
-E:\cpp代码\cpp\zuo_ti\简单做题的代码\test.c(7,9): warning C4477: “printf”: 格式字符串“%d”需要类型“int”的参数，但可变参数 4 拥有了类型“__int64”
-E:\cpp代码\cpp\zuo_ti\简单做题的代码\test.c(7,9): message : 请考虑在格式字符串中使用“%lld”
-E:\cpp代码\cpp\zuo_ti\简单做题的代码\test.c(7,9): message : 请考虑在格式字符串中使用“%I64d”
-E:\cpp代码\cpp\zuo_ti\简单做题的代码\test.c(7,9): warning C4477: “printf”: 格式字符串“%d”需要类型“int”的参数，但可变参数 5 拥有了类型“__int64”
-E:\cpp代码\cpp\zuo_ti\简单做题的代码\test.c(7,9): message : 请考虑在格式字符串中使用“%lld”
-E:\cpp代码\cpp\zuo_ti\简单做题的代码\test.c(7,9): message : 请考虑在格式字符串中使用“%I64d”
-E:\cpp代码\cpp\zuo_ti\简单做题的代码\test.c(7,9): warning C4477: “printf”: 格式字符串“%d”需要类型“int”的参数，但可变参数 6 拥有了类型“__int64”
-E:\cpp代码\cpp\zuo_ti\简单做题的代码\test.c(7,9): message : 请考虑在格式字符串中使用“%lld”
-E:\cpp代码\cpp\zuo_ti\简单做题的代码\test.c(7,9): message : 请考虑在格式字符串中使用“%I64d”
   简单做题的代码.vcxproj -> E:\cpp代码\cpp\zuo_ti\Debug\简单做题的代码.exe
