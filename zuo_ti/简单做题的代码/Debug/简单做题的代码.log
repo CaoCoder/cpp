@@ -1,2 +1,3 @@
-﻿  test.c
+﻿  test.cpp
+Debug\test.obj : warning LNK4042: 对象被多次指定；已忽略多余的指定
   简单做题的代码.vcxproj -> E:\cpp代码\cpp\zuo_ti\Debug\简单做题的代码.exe

@@ -1,35 +1,52 @@
-#define  _CRT_SECURE_NO_WARNINGS
-#include <stdio.h>
-#include <stdio.h>
-int func(int x)
-{
-	int count = 0;
-	while (x)
-	{
-		count++;
-		x = x & (x - 1);
-	}
-	return count;
-}
-int main() {
-	
-	printf("%d", func(9999));
-	return 0;
-}
-
-
-//babc  daa
-//0010011100001111
-//0010011100001110
-//0 1 2 3 4 5 6 7 8 9
-//1 1 2 3 4 5 6 7 8 9
-//2 1 2 3 4 5 6 7 8 9
-//3 1 2 3 4 5 6 7 8 9
-//4 1 2 3 4 5 6 7 8 9
-//5 1 2 3 4 5 6 7 8 9
-//6 1 2 3 4 5 6 7 8 9
-//7 1 2 3 4 5 6 7 8 9
-//8 1 2 3 4 5 6 7 8 9
-//9 1 2 3 4 5 6 7 8 9
-
-
+//#define  _CRT_SECURE_NO_WARNINGS
+//#include <stdio.h>
+//#include <stdio.h>
+////int func(int x)
+////{
+////	int count = 0;
+////	while (x)
+////	{
+////		count++;
+////		x = x & (x - 1);
+////	}
+////	return count;
+////}
+////int main() {
+////	
+////	printf("%d", func(9999));
+////	return 0;
+////}
+//
+//#include <stdio.h>
+//#include <stdlib.h>
+//
+//int main()
+//{
+//    int L, M;
+//    scanf("%d %d", &L, &M);
+//
+//    int* trees = (int*)malloc((L + 1) * sizeof(int));  // 动态分配内存
+//    for (int i = 0; i <= L; i++) {
+//        trees[i] = 1;  // 循环初始化数组，所有树的位置都为1
+//    }
+//
+//    int start, end;
+//    for (int i = 1; i <= M; i++) {
+//        scanf("%d %d", &start, &end);
+//        for (int j = start; j <= end; j++) {
+//            trees[j] = 0;  // 将需要移除的树的位置标记为0
+//        }
+//    }
+//
+//    int count = 0;
+//    for (int i = 0; i <= L; i++) {
+//        if (trees[i] == 1) {
+//            count++;
+//        }
+//    }
+//
+//    printf("%d\n", count);
+//
+//    free(trees);  // 释放内存
+//
+//    return 0;
