@@ -1,3 +1,3 @@
 ﻿  test.cpp
-Debug\test.obj : warning LNK4042: 对象被多次指定；已忽略多余的指定
+E:\cpp代码\cpp\zuo_ti\简单做题的代码\test.cpp(105,12): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
   简单做题的代码.vcxproj -> E:\cpp代码\cpp\zuo_ti\Debug\简单做题的代码.exe
