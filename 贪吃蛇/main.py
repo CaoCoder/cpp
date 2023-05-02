@@ -199,6 +199,7 @@ class Snake(BaseSprite):
         self.body_list = self.init_body_list()
 
 
+<<<<<<< HEAD
     def init_body_list(self):
         # 获取蛇头的初始位置
         x, y = self.INIT_HEAD_POS
@@ -214,6 +215,23 @@ class Snake(BaseSprite):
         return body_list
     
     def init_body_list2(self):
+=======
+    # def init_body_list(self):
+    #     # 获取蛇头的初始位置
+    #     x, y = self.INIT_HEAD_POS
+    #     # 创建一个空列表，用于存储蛇的身体坐标
+    #     body_list = []
+    #     # 循环添加蛇身体的每一节
+    #     for i in range(self.INIT_LENGTH):
+    #         # 将当前位置添加到身体列表中
+    #         body_list.append((x, y))
+    #         # 计算下一节身体的位置
+    #         x, y = DirectionManager.back_one_step(self.direction, x, y)
+    #     # 返回身体列表
+    #     return body_list
+    
+    def init_body_list(self):
+>>>>>>> f9f6607723f640c5c23dffd9455c6824329df031
         x, y = self.INIT_HEAD_POS
         return [(x, y)] + [DirectionManager.back_one_step(self.direction, x, y) for i in range(1, self.INIT_LENGTH)]
 
