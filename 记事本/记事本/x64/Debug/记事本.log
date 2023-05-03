@@ -1,0 +1,15 @@
+﻿  test1.c
+E:\cpp代码\cpp\记事本\记事本\test1.c(67,5): warning C4033: “menu_select_delete”必须返回值
+E:\cpp代码\cpp\记事本\记事本\test1.c(81,5): warning C4033: “menu_select_insert”必须返回值
+E:\cpp代码\cpp\记事本\记事本\test1.c(224,17): warning C4013: “strlen”未定义；假设外部返回 int
+E:\cpp代码\cpp\记事本\记事本\test1.c(230,17): warning C4013: “strcat”未定义；假设外部返回 int
+E:\cpp代码\cpp\记事本\记事本\test1.c(235,13): warning C4013: “strcpy”未定义；假设外部返回 int
+E:\cpp代码\cpp\记事本\记事本\test1.c(313,17): warning C4013: “strcmp”未定义；假设外部返回 int
+E:\cpp代码\cpp\记事本\记事本\test1.c(337,29): warning C4047: “=”:“line *”与“int”的间接级别不同
+E:\cpp代码\cpp\记事本\记事本\test1.c(341,5): warning C4033: “find”必须返回值
+E:\cpp代码\cpp\记事本\记事本\test1.c(550,23): warning C4477: “scanf”: 格式字符串“%d”需要类型“int *”的参数，但可变参数 1 拥有了类型“char (*)[100]”
+E:\cpp代码\cpp\记事本\记事本\test1.c(550,23): message : 请考虑在格式字符串中使用“%hhd”
+E:\cpp代码\cpp\记事本\记事本\test1.c(82): warning C4716: “menu_select_insert”: 必须返回一个值
+E:\cpp代码\cpp\记事本\记事本\test1.c(68): warning C4716: “menu_select_delete”: 必须返回一个值
+E:\cpp代码\cpp\记事本\记事本\test1.c(342): warning C4716: “find”: 必须返回一个值
+  记事本.vcxproj -> E:\cpp代码\cpp\记事本\x64\Debug\记事本.exe
