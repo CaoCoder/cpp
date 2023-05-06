@@ -1,7 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
-#include <stdio.h>
+#include <string.h>
 
 #include <stdlib.h>
 #define MAX_LEN 100
@@ -50,7 +50,7 @@ int menu_select()
     {
         printf("\n\n\t\t请按数字选择：");
         scanf("%d", &c);
-    } while (!(c >= 1 && c <= 9));
+    } while (!(c >= 1 && c <= 8));
     return c;
 }
 //下列是删除 功能子菜单的提示界面
@@ -64,7 +64,7 @@ int menu_select_delete()
         printf("\n\n\t\t请按数字选择：");
         scanf("%d", &c);
     } while (!(c >= 1 && c <= 3));
-    return;
+    return c;
 }
 //下列是插入子菜单 的提示，插入菜单的选项
 int menu_select_insert()
@@ -78,7 +78,7 @@ int menu_select_insert()
         printf("\n\n\t\t请按数字选择：");
         scanf("%d", &c);
     } while (!(c >= 1 && c <= 3));
-    return;
+    return c;
 }
 //下列是显示子菜单，说明显示功能下的选项
 int menu_select_printf()
@@ -120,7 +120,7 @@ void  enter(int linenum)
         q = p;
         p = p->next;
     }
-    if (p = NULL && (q->num + 1) != linenum)
+    if (p == NULL && (q->num + 1) != linenum)
         printf("指定行不存在\n");
     else
     {
@@ -138,15 +138,15 @@ void  enter(int linenum)
         else if (q->num != linenum)//插入最后一排
         {
             q->next = info;
-            info->next = p;
+            info->next = NULL;//p;
             info->pro = q;
         }
         else//插入其他行
         {
-            q->next = info;
-            info->next = p;
-            p->pro = info;
-            info->pro = q;
+            p->next = info;//q
+            info->next = q;//p
+            q->pro = info;
+            info->pro = p;
         }
         while (p)//除去插入在最后一行的情况，其余的行号加一
         {
@@ -226,8 +226,7 @@ void insert(char str[], int linenum, int position)
         {
             len = position - lenth - 1;
             for (i = 0; i < len; i++)
-
-                strcat(info->next, nostr);//将空格拼接到字符中
+                strcat(info->text, nostr);//将空格拼接到字符中
             strcat(info->text, str);
         }
         else//插入到文本中央的情况
@@ -334,12 +333,12 @@ struct line* find(int linenum)
     while (info)
     {
         if (linenum != info->num)
-            info = info->num;
+            info = info;
         else
             break;
     }
-    return;
-};
+    return 0;
+}
 //执行显示指定功能
 void printline(int linenum)
 {
@@ -558,6 +557,7 @@ int main()
             load();
             break;
         case 8://退出编译器
+            printf("已经退出编译\n");
             break;
         }
     } while (1);
