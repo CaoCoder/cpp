@@ -46,42 +46,59 @@ void Algorithm::Film()
 		pMem[i] = (~pMem[i]) & 0x00FFFFFF;
 }
 
-void Algorithm::Sketch()		// 素描
+void Algorithm::Sketch()	// 素描
 {
+	// 定义指向灰度图和高斯模糊图的指针
 	IMAGE* gray, * guassian;
-	Histogram();				// 直方图
-	Gray();						// 灰度处理
+	// 计算图像直方图
+	Histogram();
+	// 灰度处理
+	Gray();
+	// 创建灰度图
 	gray = new IMAGE();
+	// 创建高斯模糊图
 	guassian = new IMAGE();
+	// 将pimg赋值给gray
 	*gray = *pimg;
-	Film();						//底片处理
+	// 底片处理
+	Film();
 
-	// 这里需要考虑的是模糊化处理的次数
+	// 进行10次模糊化处理
 	for (int i = 0; i < 10; i++)
 	{
-		Blur();  //模糊算法
+		Blur(); // 模糊算法
 	}
+	// 将pimg赋值给guassian
 	*guassian = *pimg;
+	// 将pimg赋值为gray
 	*pimg = *gray;
+
+	// 获取pimg、gray、guassian的像素缓冲区指针
 	DWORD* pMem = GetImageBuffer(pimg);
 	DWORD* Gray = GetImageBuffer(gray);
 	DWORD* Guassian = GetImageBuffer(guassian);
 
 	int R, G, B;
 	int RR, GG, BB;
+	// 处理每一个像素
 	for (int i = WIDTH * HEIGHT - 1; i >= 0; i--)
 	{
+		// 获取灰度图像素的R、G、B分量
 		R = GetRValue(Gray[i]);
 		B = GetBValue(Gray[i]);
 		G = GetGValue(Gray[i]);
+		// 获取高斯模糊图像素的R、G、B分量
 		RR = GetRValue(Guassian[i]);
 		BB = GetBValue(Guassian[i]);
 		GG = GetGValue(Guassian[i]);
+		// 计算每个像素的新的R、G、B分量
 		int r = min(R + (R * RR) / (255 - RR), 255);
 		int g = min(G + (G * GG) / (255 - GG), 255);
 		int b = min(B + (B * BB) / (255 - BB), 255);
+		// 将新的R、G、B分量组合成一个像素，并存储到pimg的像素缓冲区中
 		pMem[i] = RGB(r, g, b);
 	}
+	// 释放gray和guassian所占用的内存
 	delete (gray);
 	delete(guassian);
 }
@@ -236,7 +253,6 @@ void Algorithm::Blur()
 	R = G = B = NULL;
 }
 
-
 void GetP()
 {
 	for (int i = 0; i < pic_Dis; i++)
@@ -270,18 +286,26 @@ void GetP()
 
 int main()
 {
-	int	width = 0;
-	int	height = 0;
+	// 初始化宽度和高度为0
+	int width = 0;
+	int height = 0;
+	// 创建一个IMAGE对象g_img
 	IMAGE g_img;
-	loadimage(&g_img, _T("liuyifei.jpg"));	// 加载图片
+	// 加载图片"liuyifei.jpg"到g_img中
+	loadimage(&g_img, _T("liuyifei.jpg"));
+	// 获取图片宽度和高度，并赋值给width和height
 	width = g_img.getwidth();
 	height = g_img.getheight();
+	// 创建一个Algorithm对象myA，传入g_img、width和height
 	Algorithm myA(&g_img, width, height);
-
+	// 初始化图形界面，窗口大小为width * height
 	initgraph(width, height);
-
+	// 对g_img进行素描处理
 	myA.Sketch();
+	// 将处理后的g_img显示在屏幕上，位置为(0,0)
 	putimage(0, 0, &g_img);
+	// 等待用户按下任意键
 	_getch();
+	// 程序结束，返回0
 	return 0;
 }
