@@ -1,0 +1,150 @@
+import random
+import pandas as pd
+from csmarapi.CsmarService import CsmarService
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# 读取股票名称文件
+stock_names = pd.read_csv('stock_name.csv')
+
+# 剔除ST股票
+stock_names = stock_names[~stock_names['name'].str.contains('ST')]
+
+# 随机选择20只股票
+selected_stocks = random.sample(stock_names['symbol'].tolist(), 20)
+
+# 创建CsmarService对象并登录
+csmar = CsmarService()
+csmar.login('1089210102', 'mario000@')
+
+# 获取股票数据
+start_date = '2020-01-01'
+end_date = '2023-05-10'
+data = csmar.query_df(['ts_code', 'trade_date', 'close'], f"ts_code in {selected_stocks}", 'Daily_Price', start_date, end_date)
+
+# 确保所有股票都有完整的数据
+missing_stocks = set(selected_stocks) - set(data['ts_code'].unique())
+while missing_stocks:
+    # 重新随机选择20只股票
+    selected_stocks = random.sample(stock_names['symbol'].tolist(), 20)
+    missing_stocks = set(selected_stocks) - set(data['ts_code'].unique())
+
+    # 获取股票数据
+    data = csmar.query_df(['ts_code', 'trade_date', 'close'], f"ts_code in {selected_stocks}", 'Daily_Price', start_date, end_date)
+
+# 打印数据
+print(data)
+
+
+# 2. 计算收益率
+returns = data.pivot(index='trade_date', columns='ts_code', values='close').pct_change().dropna()
+arithmetic_returns = returns.mean()
+log_returns = np.log(1 + arithmetic_returns)
+log_returns_yearly = log_returns * 250
+
+# 3. 排序和绘制年收益率-年标准差散点图
+returns_std_yearly = returns.std() * np.sqrt(250)
+returns_df = pd.DataFrame({'returns': log_returns_yearly, 'std_dev': returns_std_yearly})
+returns_df_sorted = returns_df.sort_values('returns', ascending=False)
+plt.figure(figsize=(8, 6))
+plt.scatter(returns_df_sorted['std_dev'], returns_df_sorted['returns'])
+plt.xlabel('年标准差')
+plt.ylabel('年收益率')
+plt.title('股票收益率的均值-标准差图')
+plt.show()
+
+# 4. 计算投资组合标准差随着股票数量变化的情况
+portfolio_std = []
+for i in range(1, 21):
+    selected_stocks = random.sample(stock_names['symbol'].tolist(), i)
+    portfolio_returns = returns[selected_stocks].mean(axis=1)
+    portfolio_std_dev = portfolio_returns.std() * np.sqrt(250)
+    portfolio_std.append(portfolio_std_dev)
+
+plt.figure(figsize=(8, 6))
+plt.plot(range(1, 21), portfolio_std)
+plt.xlabel('投资组合中股票的数量')
+plt.ylabel('投资组合的年标准差')
+plt.title('投资组合风险与股票数量')
+plt.show()
+
+# 5. 随机生成2000组不同权重的投资组合
+n_portfolios = 2000
+portfolios = []
+for _ in range(n_portfolios):
+    weights = np.random.random(20)
+    weights /= np.sum(weights)
+    portfolio_returns = returns.dot(weights)
+    portfolio_std_dev = portfolio_returns.std() * np.sqrt(250)
+    portfolios.append({'returns': portfolio_returns.mean() * 250, 'std_dev': portfolio_std_dev})
+
+portfolios_df = pd.DataFrame(portfolios)
+
+plt.figure(figsize=(8, 6))
+plt.scatter(portfolios_df['std_dev'], portfolios_df['returns'])
+plt.xlabel('年标准差')
+plt.ylabel('年收益率')
+plt.title('不同权重生成的投资组合年度标准差和年收益率')
+plt.show()
+
+# 6. 构造最优投资组合
+cov_matrix = returns.cov() * 250
+num_portfolios = 5000
+
+def portfolio_performance(weights):
+    returns = np.sum(log_returns_yearly * weights)
+    std_dev = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights)))
+    return returns, std_dev
+
+def simulate_portfolios():
+    results = np.zeros((3, num_portfolios))
+    for i in range(num_portfolios):
+        weights = np.random.random(20)
+        weights /= np.sum(weights)
+        portfolio_returns, portfolio_std_dev = portfolio_performance(weights)
+        results[0, i] = portfolio_returns
+        results[1, i] = portfolio_std_dev
+        results[2, i] = results[0, i] / results[1, i]
+    return results
+
+results = simulate_portfolios()
+max_sharpe_idx = np.argmax(results[2])
+optimal_weights = results[:, max_sharpe_idx]
+optimal_returns, optimal_std_dev = optimal_weights[0], optimal_weights[1]
+
+plt.figure(figsize=(8, 6))
+plt.scatter(results[1, :], results[0, :], c=results[2, :], cmap='viridis')
+plt.colorbar(label='Sharpe Ratio')
+plt.scatter(optimal_std_dev, optimal_returns, marker='*', color='r', s=200, label='最优投资组合')
+plt.xlabel('年标准差')
+plt.ylabel('年收益率')
+plt.title('投资组合散点图及有效边界')
+plt.legend()
+plt.show()
+
+# 7. 计算alpha和beta值，并绘制SML
+market_data = csmar.query_df(['trade_date', 'close'], 'ts_code = "399300.SZ"', 'Daily_Price', start_date, end_date)
+market_returns = market_data.pivot(index='trade_date', columns='ts_code', values='close').pct_change().dropna()
+market_returns_yearly = np.log(1 + market_returns.mean()) * 250
+returns_cov = returns.cov() * 250
+
+alpha_values = []
+beta_values = []
+for stock in returns.columns:
+    stock_returns = log_returns_yearly[stock]
+    beta, alpha = np.polyfit(market_returns_yearly.values.flatten(), stock_returns.values.flatten(), deg=1)
+    alpha_values.append(alpha)
+    beta_values.append(beta)
+
+sml_slope = np.max(beta_values)
+sml_intercept = np.mean(log_returns_yearly) - sml_slope * np.mean(market_returns_yearly)
+
+plt.figure(figsize=(8, 6))
+plt.scatter(beta_values, alpha_values, alpha=0.6)
+plt.plot(np.linspace(0, np.max(beta_values)), sml_intercept + sml_slope * np.linspace(0, np.max(beta_values)), 'r', label='SML')
+plt.xlabel('beta')
+plt.ylabel('alpha')
+plt.title('证券市场线SML')
+plt.legend()
+plt.show()
