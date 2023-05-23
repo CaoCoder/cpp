@@ -1,0 +1,55 @@
+package com.example;
+
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Scanner;
+
+public class T3 {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Map<String, Student> map = new HashMap<>();
+        while (true) {
+            System.out.println("请输入名字：");
+            String name = sc.next();
+            System.out.println("请输入学号：");
+            String id = sc.next();
+            // 检查输入是否合法
+            if (id.trim().isEmpty()) {
+                System.out.println("学号不能为空，请重新输入！");
+                continue;
+            }
+            if (map.containsKey(id)) {
+                System.out.println("学号已存在，请重新输入！");
+                continue;
+            }
+            Student student = new Student(name, id);
+            map.put(id, student);
+            System.out.println("是否继续录入？【y--继续 其他--终止】");
+            String choose = sc.next();
+            if (!"y".equalsIgnoreCase(choose)) {
+                System.out.println("录入结束！");
+                break;
+            }
+        }
+        // 关闭Scanner对象
+        sc.close();
+    }
+}
+
+class Student {
+    private String name;
+    private String id;
+
+    public Student(String name,String id) {
+        this.name = name;
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getId() {
+        return id;
+    }
+}
