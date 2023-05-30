@@ -1,79 +1,40 @@
+ï»¿#define _CRT_SECURE_NO_WARNINGS 1
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-#define MAX_NODES 100
+typedef struct list {
+    int data;
+    struct list* next;
+} list;
 
-typedef struct node {
-    char name[50];
-    int parent;
-    int children[3];
-} Node;
+void creatlist(list** head, int n) {
+    list* p = NULL;
+    list* tail = *head;
+    for (int i = 0; i < n; i++) {
+        p = (list*)malloc(sizeof(list));
+        scanf("%d", &(p->data));
+        p->next = NULL;
+        tail->next = p;
+        tail = p;
+    }
+}
 
-void print(Node* nodes, int index, int level);
-void print_padding(int level);
-void print_vertical_line(int level);
+void printlist(list* head) {
+    list* p = head->next;
+    while (p != NULL) {
+        printf("%d ", p->data);
+        p = p->next;
+    }
+    printf("\n");
+}
 
 int main() {
-    Node nodes[MAX_NODES] = {
-        {"ÖÐ»ª´óÑ§", -1, {1, 2, -1}},
-        {"¼ÆËã»úÑ§Ôº", 0, {3, 4, 5}},
-        {"µçÐÅÑ§Ôº", 0, {6, 7, -1}},
-        {"¼ÆËã»ú¿ÆÑ§", 1, {8, 9, 10}},
-        {"ÐÅÏ¢°²È«", 1, {11, 12, -1}},
-        {"ÎïÁªÍø", 1, {13, -1, -1}},
-        {"¼Æ¿Æ1°à", 3, {14, -1, -1}},
-        {"¼Æ¿Æ2°à", 3, {15, -1, -1}},
-        {"¼Æ¿Æ3°à", 3, {16, -1, -1}},
-        {"ÐÅ°²1°à", 4, {17, -1, -1}},
-        {"ÐÅ°²2°à", 4, {18, -1, -1}},
-        {"ÎïÁª°à", 5, {19, -1, -1}},
-        {"µç×ÓÐÅÏ¢Àà", 2, {20, 21, 22}},
-        {"ÐÅÏ¢¹¤³Ì", 2, {23, 24, -1}},
-        {"µçÐÅ1°à", 6, {25, -1, -1}},
-        {"µçÐÅ2°à", 6, {26, -1, -1}},
-        {"µçÐÅ3°à", 6, {27, -1, -1}},
-        {"ÐÅÏ¢1°à", 7, {28, -1, -1}},
-        {"ÐÅÏ¢2°à", 7, {29, -1, -1}},
-        {"32", 8, {-1, -1, -1}},
-        {"35", 9, {-1, -1, -1}},
-        {"33", 10, {-1, -1, -1}},
-        {"36", 11, {-1, -1, -1}},
-        {"38", 12, {-1, -1, -1}},
-        {"38", 13, {-1, -1, -1}},
-        {"40", 20, {-1, -1, -1}},
-        {"38", 21, {-1, -1, -1}},
-        {"42", 22, {-1, -1, -1}},
-        {"38", 23, {-1, -1, -1}},
-        {"35", 24, {-1, -1, -1}},
-    };
-    print(nodes, 0, 0); // ¸ù½ÚµãµÄË÷ÒýÎª 0£¬³õÊ¼Ëõ½ø²ã¼¶Îª 0
-
+    list* head = (list*)malloc(sizeof(list));
+    head->next = NULL;
+    int n;
+    scanf("%d", &n);
+    creatlist(&head, n);
+    printlist(head);
     return 0;
-
-}
-
-void print_padding(int level) {
-    for (int i = 0; i < level; i++) {
-        printf(" "); // Ã¿Ò»¼¶Ëõ½øÁ½¸ö¿Õ¸ñ
-    }
-}
-
-void print_vertical_line(int level) {
-    for (int i = 0; i < level; i++) {
-        if (i == level - 1) {
-            printf("|--");
-        }
-        else {
-            printf(" "); // Ã¿Ò»¼¶Ëõ½øÈý¸ö¿Õ¸ñ
-        }
-    }
-}
-
-void print(Node* nodes, int index, int level) {
-    print_padding(level);
-    printf("%s\n", nodes[index].name); for (int i = 0; i < 3 && nodes[index].children[i] != -1; i++) {
-        print_vertical_line(level);
-        print(nodes, nodes[index].children[i], level + 1);
-    }
 }
