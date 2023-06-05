@@ -1,0 +1,5 @@
+﻿  BiTree.cpp
+E:\cpp代码\cpp\二叉树实验\二叉树实验\BiTree.cpp(197,16): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+E:\cpp代码\cpp\二叉树实验\二叉树实验\BiTree.cpp(203,27): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+E:\cpp代码\cpp\二叉树实验\二叉树实验\BiTree.cpp(252,37): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+  二叉树实验.vcxproj -> E:\cpp代码\cpp\二叉树实验\x64\Debug\二叉树实验.exe

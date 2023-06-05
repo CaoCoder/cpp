@@ -1,2 +1,4 @@
 ﻿  test.c
-  简单做题的代码.vcxproj -> E:\cpp代码\cpp\zuo_ti\Debug\简单做题的代码.exe
+Debug\test.obj : warning LNK4042: 对象被多次指定；已忽略多余的指定
+MSVCRTD.lib(exe_main.obj) : error LNK2019: 无法解析的外部符号 _main，函数 "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ) 中引用了该符号
+E:\cpp代码\cpp\zuo_ti\Debug\简单做题的代码.exe : fatal error LNK1120: 1 个无法解析的外部命令
