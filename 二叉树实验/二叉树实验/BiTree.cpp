@@ -1,7 +1,26 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
+#include <iostream>
+#include <fstream>
+#include <cstring>
+#include <queue>
+using namespace std;
 
-#include "BiTree.h"
+// 二叉树结点定义
+
+typedef struct BiNode {
+    BiNode()
+    {};
+    char data;  // 结点数据
+    BiNode* lChild;  // 左子树结点指针
+    BiNode* rChild;  // 右子树结点指针
+    BiNode(int d) {
+        data = d;
+        lChild = NULL;
+        rChild = NULL;
+    }
+} BiNode, * BiTree;
+
 // 从文件中读取数据到数组
 bool ReadFileToArray(char fileName[], char strLine[100][3], int& nArrLen) {
     FILE* pFile;  // 定义文件指针
