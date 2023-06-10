@@ -6,264 +6,28 @@
 
 using namespace std;
 
-// 商品类
-class Product {
-protected:
-    int productId;
-    string productName;
-    double productPrice;
-    int productQuantity;
 
-public:
-    Product(int id, string name, double price, int quantity)
-        : productId(id), productName(name), productPrice(price), productQuantity(quantity) {}
+#include "Buyer.h"
+#include "Product.h"
+#include "User.h"
+#include "Seller.h"
+#include "Product.h"
+#include "FoodProduct.h"
+#include "CosmeticsProduct.h"
+#include "DailyProduct.h"
+#include "BeverageProduct.h"
 
-    int getProductId() const {
-        return productId;
-    }
-
-    string getProductName() const {
-        return productName;
-    }
-
-    double getProductPrice() const {
-        return productPrice;
-    }
-
-    int getProductQuantity() const {
-        return productQuantity;
-    }
-
-    void setProductName(string name) {
-        productName = name;
-    }
-
-    void setProductPrice(double price) {
-        productPrice = price;
-    }
-
-    void setProductQuantity(int quantity) {
-        productQuantity = quantity;
-    }
-};
-
-// 食品类
-class FoodProduct : public Product {
-public:
-    FoodProduct(int id, string name, double price, int quantity)
-        : Product(id, name, price, quantity) {}
-};
-
-// 化妆品类
-class CosmeticsProduct : public Product {
-public:
-    CosmeticsProduct(int id, string name, double price, int quantity)
-        : Product(id, name, price, quantity) {}
-};
-
-// 日用品类
-class DailyProduct : public Product {
-public:
-    DailyProduct(int id, string name, double price, int quantity)
-        : Product(id, name, price, quantity) {}
-};
-
-// 饮料类
-class BeverageProduct : public Product {
-public:
-    BeverageProduct(int id, string name, double price, int quantity)
-        : Product(id, name, price, quantity) {}
-};
-
-// 用户类
-class User {
-protected:
-    string username;
-    string password;
-
-public:
-    User(string name, string pwd)
-        : username(name), password(pwd) {}
-
-    bool authenticate(string pwd) const {
-        return password == pwd;
-    }
-};
-
-// 卖家类
-class Seller : public User {
-private:
-    string storeName;
-    vector<Product*> products;
-
-public:
-    Seller(string name, string pwd, string store)
-        : User(name, pwd), storeName(store) {}
-
-    void addProduct(Product* product) {
-        products.push_back(product);
-    }
-
-    void removeProduct(Product* product) {
-        products.erase(remove(products.begin(), products.end(), product), products.end());
-    }
-
-    void updateProduct(Product* product, string newName, double newPrice, int newQuantity) {
-        product->setProductName(newName);
-        product->setProductPrice(newPrice);
-        product->setProductQuantity(newQuantity);
-    }
-
-    void searchProductById(int id) const {
-        for (auto& product : products) {
-            if (product->getProductId() == id) {
-                cout << "商品编号: " << product->getProductId() << endl;
-                cout << "商品名称: " << product->getProductName() << endl;
-                cout << "商品价格: " << product->getProductPrice() << endl;
-                cout << "商品数量: " << product->getProductQuantity() << endl;
-                return;
-            }
-        }
-        cout << "未找到匹配的商品。" << endl;
-    }
-
-    void searchProductByName(string name) const {
-        for (auto& product : products) {
-            if (product->getProductName() == name) {
-                cout << "商品编号: " << product->getProductId() << endl;
-                cout << "商品名称: " << product->getProductName() << endl;
-                cout << "商品价格: " << product->getProductPrice() << endl;
-                cout << "商品数量: " << product->getProductQuantity() << endl;
-                return;
-            }
-        }
-        cout << "未找到匹配的商品。" << endl;
-    }
-
-    void searchProductByCategory(int category) const {
-        for (auto& product : products) {
-            // 根据不同的类别进行判断
-            if (product->getProductId() == category) {
-                cout << "商品编号: " << product->getProductId() << endl;
-                cout << "商品名称: " << product->getProductName() << endl;
-                cout << "商品价格: " << product->getProductPrice() << endl;
-                cout << "商品数量: " << product->getProductQuantity() << endl;
-            }
-        }
-    }
-
-    void calculateStats() const {
-        int totalCount = 0;
-        for (auto& product : products) {
-            totalCount += product->getProductQuantity();
-        }
-        cout << "总商品数量: " << totalCount << endl;
-    }
-
-    void saveToFile() const {
-        ofstream file("store_data.txt");
-        if (file.is_open()) {
-            file << "店铺名称: " << storeName << endl;
-            file << "店铺商品信息:" << endl;
-            for (auto& product : products) {
-                file << "商品编号: " << product->getProductId() << endl;
-                file << "商品名称: " << product->getProductName() << endl;
-                file << "商品价格: " << product->getProductPrice() << endl;
-                file << "商品数量: " << product->getProductQuantity() << endl;
-                file << endl;
-            }
-            file.close();
-            cout << "店铺信息已保存到磁盘。" << endl;
-        }
-        else {
-            cout << "无法保存店铺信息到磁盘。" << endl;
-        }
-    }
-};
-
-// 买家类
-class Buyer : public User {
-private:
-    string name;
-    vector<Product*> cart;
-
-public:
-    Buyer(string name, string pwd)
-        : User(name, pwd), name(name) {}
-
-    void searchProductById(const vector<Product*>& products, int id) const {
-        for (auto& product : products) {
-            if (product->getProductId() == id) {
-                cout << "商品编号: " << product->getProductId() << endl;
-                cout << "商品名称: " << product->getProductName() << endl;
-                cout << "商品价格: " << product->getProductPrice() << endl;
-                cout << "商品数量: " << product->getProductQuantity() << endl;
-                return;
-            }
-        }
-        cout << "未找到匹配的商品。" << endl;
-    }
-
-    void searchProductByName(const vector<Product*>& products, string name) const {
-        for (auto& product : products) {
-            if (product->getProductName() == name) {
-                cout << "商品编号: " << product->getProductId() << endl;
-                cout << "商品名称: " << product->getProductName() << endl;
-                cout << "商品价格: " << product->getProductPrice() << endl;
-                cout << "商品数量: " << product->getProductQuantity() << endl;
-                return;
-            }
-        }
-        cout << "未找到匹配的商品。" << endl;
-    }
-
-    void searchProductByCategory(const vector<Product*>& products, int category) const {
-        for (auto& product : products) {
-            // 根据不同的类别进行判断
-            if (product->getProductId() == category) {
-                cout << "商品编号: " << product->getProductId() << endl;
-                cout << "商品名称: " << product->getProductName() << endl;
-                cout << "商品价格: " << product->getProductPrice() << endl;
-                cout << "商品数量: " << product->getProductQuantity() << endl;
-            }
-        }
-    }
-
-    void addToCart(Product* product) {
-        if (product->getProductQuantity() > 0) {
-            cart.push_back(product);
-            product->setProductQuantity(product->getProductQuantity() - 1);
-            cout << "商品已添加到购物车。" << endl;
-        }
-        else {
-            cout << "商品库存不足，无法添加到购物车。" << endl;
-        }
-    }
-
-    void showCart() const {
-        if (cart.empty()) {
-            cout << "购物车为空。" << endl;
-        }
-        else {
-            cout << "购物车中的商品:" << endl;
-            for (auto& product : cart) {
-                cout << "商品编号: " << product->getProductId() << endl;
-                cout << "商品名称: " << product->getProductName() << endl;
-                cout << "商品价格: " << product->getProductPrice() << endl;
-                cout << endl;
-            }
-        }
-    }
-};
-
+std::vector<Product*> products;
+using namespace std;
 int main() {
-    vector<Product*> products;
+ 
 
     // 添加一些示例商品
     products.push_back(new FoodProduct(1, "苹果", 5.99, 10));
     products.push_back(new CosmeticsProduct(2, "洗面奶", 29.99, 5));
     products.push_back(new DailyProduct(3, "牙刷", 4.5, 20));
     products.push_back(new BeverageProduct(4, "可乐", 3.99, 15));
+
 
     string username, password;
     int roleChoice;
@@ -282,16 +46,21 @@ int main() {
             break;
         }
 
-        cout << "请输入用户名: ";
-        cin >> username;
-        cout << "请输入密码: ";
-        cin >> password;
-
         bool validLogin = false;
         if (roleChoice == 1) {
+
+
+
+      /*      cout << "请输入用户名: ";
+            cin >> username;
+            cout << "请输入密码: ";
+            cin >> password;*/
+
             // 卖家登录
             Seller seller("seller", "password", "My Store");
-            validLogin = seller.authenticate(password);
+            seller.registerAccount();
+            validLogin = seller.login();
+            //validLogin = seller.authenticate(password);
 
             if (validLogin) {
                 cout << "卖家登录成功！" << endl;
@@ -305,6 +74,8 @@ int main() {
                     cout << "4. 查询商品" << endl;
                     cout << "5. 统计商品" << endl;
                     cout << "6. 保存到磁盘" << endl;
+                    cout << "7. 查看商品" << endl;
+                    cout << "8. 按名称排序商品" << endl;
                     cout << "0. 退出系统" << endl;
                     cout << "请输入选择: ";
                     cin >> sellerChoice;
@@ -416,6 +187,16 @@ int main() {
                         seller.saveToFile();
                         break;
                     }
+                    case 7: {
+                        seller.viewProducts();
+                        break;
+                    }
+                    case 8: {
+                        //排序
+                        seller.sortProductsByName();
+                        seller.showSortedProducts();
+                        break;
+                    }
                     default:
                         cout << "无效的选择。" << endl;
                     }
@@ -423,7 +204,42 @@ int main() {
             }
         }
         else if (roleChoice == 2) {
+            int buyerLoginChoice;
+            cout << "请选择登录方式:" << endl;
+            cout << "1. 已有账户登录" << endl;
+            cout << "2. 注册新账户" << endl;
+            cout << "请输入选择: ";
+            cin >> buyerLoginChoice;
+
+            if (buyerLoginChoice == 1) {
+                // 已有账户登录          
+            }
+            else if (buyerLoginChoice == 2) {
+             
+                // 注册新账户
+                string buyerName, buyerPassword;
+
+                cout << "请输入买家姓名: ";
+                cin >> buyerName;
+                cout << "请输入密码: ";
+                cin >> buyerPassword;
+
+                Buyer buyer(buyerName, buyerPassword);
+                buyer.registerAccount();
+
+                cout << "买家注册成功！" << endl;
+                cout << "请使用新账户登录。" << endl;
+            }
+            else {
+                cout << "无效的选择。" << endl;
+            }
+            
+            
             // 买家登录
+            cout << "请输入用户名: ";
+            cin >> username;
+            cout << "请输入密码: ";
+            cin >> password;
             Buyer buyer("buyer", "password");
             validLogin = buyer.authenticate(password);
 
@@ -436,6 +252,8 @@ int main() {
                     cout << "1. 查询商品" << endl;
                     cout << "2. 加入购物车" << endl;
                     cout << "3. 查看购物车" << endl;
+                    cout << "4. 按商品名称排序" << endl;
+
                     cout << "0. 退出系统" << endl;
                     cout << "请输入选择: ";
                     cin >> buyerChoice;
@@ -499,6 +317,14 @@ int main() {
                     }
                     case 3: {
                         // 查看购物车
+                        buyer.showCart();
+                        break;
+                    }
+
+                    case 4:
+                    {
+                        //按名称排序
+                        buyer.sortCartByName();
                         buyer.showCart();
                         break;
                     }
